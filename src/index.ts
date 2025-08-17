@@ -11,66 +11,54 @@ export class Terrain {
   }
 
   wall() {
-    if(this.units.some(unit => unit.name === 'marine') &&
-       this.units.some(unit => unit.name === 'zealot')
-    ) {
-      const zealot = this.units.find(unit => unit.name === 'zealot');
-      if (zealot !== undefined) {
-        zealot.health = 0;
-      }
-      return this.units;
-    }
-    if(this.units.some(unit => unit.name === 'marine') &&
-       this.units.some(unit => unit.name === 'zergling')
-    ) {
-      const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zergling !== undefined) {
-        zergling.health = 0;
-      }
-      return this.units;
-    }
+    let heroNames = this.units[0].name;
+    let enemyNames = this.units[this.units.length - 1].name;
+    const heroes = this.units.filter(unit => unit.name === heroNames);
+    const enemies = this.units.filter(unit => unit.name === enemyNames);
+
+    heroes.forEach(hero => {
+      enemies.forEach(enemy => {
+        if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
+          const battle = new Battle([hero, enemy]);
+          const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle('wall');
+          hero = zealotAfterBattle;
+          enemy = zerglingAfterBattle;
+        }
+      })
+    })
 
     return this.units;
   }
 
   hill() {
-    if(this.units.some(unit => unit.name === 'marine') &&
-      this.units.some(unit => unit.name === 'zealot')
-    ) {
-      const zealot = this.units.find(unit => unit.name === 'zealot');
-      if (zealot !== undefined) {
-        zealot.health = 0;
-      }
-      const marine = this.units.find(unit => unit.name === 'marine');
-      if (marine !== undefined) {
-        marine.health = 0;
-      }
-      return this.units;
-    }
-    if(this.units.some(unit => unit.name === 'marine') &&
-      this.units.some(unit => unit.name === 'zergling')
-    ) {
-      const marine = this.units.find(unit => unit.name === 'marine');
-      if (marine !== undefined) {
-        marine.health = 0;
-      }
-      const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zergling !== undefined) {
-        zergling.health = 0;
-      }
-      return this.units;
-    }
+    let heroNames = this.units[0].name;
+    let enemyNames = this.units[this.units.length - 1].name;
+    const heroes = this.units.filter(unit => unit.name === heroNames);
+    const enemies = this.units.filter(unit => unit.name === enemyNames);
+
+    heroes.forEach(hero => {
+      enemies.forEach(enemy => {
+        if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
+          const battle = new Battle([hero, enemy]);
+          const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle('hill');
+          hero = zealotAfterBattle;
+          enemy = zerglingAfterBattle;
+        }
+      })
+    })
 
     return this.units;
   }
   flatland() {
-    const heroes = this.units.filter(unit => unit.name === this.units[0].name);
-    const enemies = this.units.filter(unit => unit.name === this.units[this.units.length - 1].name);
+    let heroNames = this.units[0].name;
+    let enemyNames = this.units[this.units.length - 1].name;
+    const heroes = this.units.filter(unit => unit.name === heroNames);
+    const enemies = this.units.filter(unit => unit.name === enemyNames);
 
     heroes.forEach(hero => {
       enemies.forEach(enemy => {
         const battle = new Battle([hero, enemy]);
-        const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle();
+        const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle('flatland');
         hero = zealotAfterBattle;
         enemy = zerglingAfterBattle;
       })
@@ -117,32 +105,75 @@ export class Battle {
   constructor(public units: [Unit, Unit]) {
   }
 
-  doBattle() {
+  // do battle on flatland
+  doBattle(terrainModifier: string = 'flatland') {
+    // wall: zergling does no damage
+    // hill: zergling does no damage
     if (this.units.map(x => x.name).includes('marine') &&
       this.units.map(x => x.name).includes('zergling')
     ) {
       const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zergling !== undefined) {
+      if (zergling === undefined) {
+        throw new Error('should never happen, the zergling is undefined');
+      }
+      if (terrainModifier === 'flatland') {
         zergling.health = 0;
       }
+      if (terrainModifier === 'wall') {
+        zergling.health = 0;
+      }
+      if (terrainModifier === 'hill') {
+        zergling.health = 0;
+      }
+
       return this.units;
     }
-    // 1 marine 1 zealot
+    // wall: zealot does no damage
+    // hill: zealot does 1 damage to marine
     if (this.units.map(x => x.name).includes('marine') &&
       this.units.map(x => x.name).includes('zealot')
     ) {
       const marine = this.units.find(unit => unit.name === 'marine');
-      if (marine !== undefined) {
+      const zealot = this.units.find(unit => unit.name === 'zealot');
+      if (marine === undefined) {
+        throw new Error('should never happen, the zergling is undefined');
+      }
+      if (zealot === undefined) {
+        throw new Error('should never happen, the zergling is undefined');
+      }
+      if (terrainModifier === 'flatland') {
         marine.health = 0;
+      }
+      if (terrainModifier === 'wall') {
+        zealot.health = 0;
+      }
+      if (terrainModifier === 'hill') {
+        marine.health = 0;
+        zealot.health = 1;
       }
       return this.units;
     }
-    // 1 zealot 1 zergling
+    // wall: no change
+    // hill: no change
     if (this.units.map(x => x.name).includes('zealot') &&
       this.units.map(x => x.name).includes('zergling')
     ) {
+      const zealot = this.units.find(unit => unit.name === 'zealot');
       const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zergling !== undefined) {
+      if (zealot === undefined) {
+        throw new Error('should never happen, the zealot is undefined');
+      }
+      if (zergling === undefined) {
+        throw new Error('should never happen, the zergling is undefined');
+      }
+      if (terrainModifier === 'flatland') {
+        zergling.health = 0;
+      }
+      if (terrainModifier === 'wall') {
+        zergling.health = 0;
+      }
+      if (terrainModifier === 'hill') {
+        zealot.health = 2;
         zergling.health = 0;
       }
       return this.units;
