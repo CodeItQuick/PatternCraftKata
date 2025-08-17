@@ -1,7 +1,16 @@
 
 export class PatternCraft {
-  takeTurn(units: Unit[]) {
+  takeTurn(units: Unit[], terrainType: string = 'flatland') {
     const terrain = new Terrain(units);
+    if(terrainType === 'flatland') {
+      return terrain.flatland();
+    }
+    if(terrainType === 'wall') {
+      return terrain.wall();
+    }
+    if(terrainType === 'hill') {
+      return terrain.hill();
+    }
     return terrain.flatland();
   }
 }
@@ -181,6 +190,7 @@ export class Battle {
   }
 }
 
+// TODO: this is not connected to the main program
 export class TerrainModifier {
   public modifier: string;
 

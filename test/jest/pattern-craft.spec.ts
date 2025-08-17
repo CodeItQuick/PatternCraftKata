@@ -7,12 +7,36 @@ describe('Pattern Craft', () => {
   // theory.forEach(x => {
     it(`marine should defeat zerg when one marine fight one zergling`, () => {
       const patternCraft = new PatternCraft();
+      let marine = new Marine();
+      let zergling = new Zergling();
 
-      const units = patternCraft.takeTurn(
-        [new Marine(), new Zergling()]);
+      const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling]);
 
-      expect(units[0].health).toBeGreaterThan(0);
-      expect(units[0].name).toBe('marine');
+      expect(marineAfterBattle.health).toEqual(2);
+      expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
+
+    })
+    it(`With a wall, a marine should defeat zerg when one marine fight one zergling`, () => {
+      const patternCraft = new PatternCraft();
+      let marine = new Marine();
+      let zergling = new Zergling();
+
+      const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling], 'wall');
+
+      expect(marineAfterBattle.health).toEqual(2);
+      expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
+
+    })
+    it(`On a hill, marine should defeat zerg when one marine fight one zergling`, () => {
+      const patternCraft = new PatternCraft();
+      let marine = new Marine();
+      let zergling = new Zergling();
+
+      const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling], 'hill');
+
+      expect(marineAfterBattle.health).toEqual(2);
+      expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
+
     })
     it(`zealot should defeat marine when one zealot fight one marine`, () => {
       const patternCraft = new PatternCraft();
