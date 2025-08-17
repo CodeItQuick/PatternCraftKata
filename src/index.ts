@@ -72,6 +72,53 @@ export class Terrain {
       }
       return this.units;
     }
+    if(this.units.some(unit => unit.name === 'marine') &&
+      this.units.some(unit => unit.name === 'zergling')
+    ) {
+      const marine = this.units.find(unit => unit.name === 'marine');
+      if (marine !== undefined) {
+        marine.health = 0;
+      }
+      const zergling = this.units.find(unit => unit.name === 'zergling');
+      if (zergling !== undefined) {
+        zergling.health = 0;
+      }
+      return this.units;
+    }
+
+    return this.units;
+  }
+  flatland() {
+    // 1 marine 1 zergling
+    if (this.units.some(unit => unit.name === 'marine') &&
+        this.units.some(unit => unit.name === 'zergling')
+    ) {
+      const zergling = this.units.find(unit => unit.name === 'zergling');
+      if (zergling !== undefined) {
+        zergling.health = 0;
+      }
+      return this.units;
+    }
+    // 1 marine 1 zealot
+    if (this.units.some(unit => unit.name === 'marine') &&
+        this.units.some(unit => unit.name === 'zealot')
+    ) {
+      const marine = this.units.find(unit => unit.name === 'marine');
+      if (marine !== undefined) {
+        marine.health = 0;
+      }
+      return this.units;
+    }
+    // 1 marine 1 zergling
+    if (this.units.some(unit => unit.name === 'marine') &&
+        this.units.some(unit => unit.name === 'zergling')
+    ) {
+      const zergling = this.units.find(unit => unit.name === 'zergling');
+      if (zergling !== undefined) {
+        zergling.health = 0;
+      }
+      return this.units;
+    }
 
     return this.units;
   }
