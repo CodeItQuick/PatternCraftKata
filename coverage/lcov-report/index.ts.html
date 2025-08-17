@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.73% </span>
+                <span class="strong">96.7% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>178/184</span>
+                <span class='fraction'>176/182</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">74.41% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>33/44</span>
+                <span class='fraction'>32/43</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.73% </span>
+                <span class="strong">96.7% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>178/184</span>
+                <span class='fraction'>176/182</span>
             </div>
         
             
@@ -245,9 +245,7 @@
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -357,7 +355,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -367,7 +364,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -394,9 +390,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">42x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -407,7 +403,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -538,18 +534,20 @@ export class Battle {
   constructor(public units: [Unit, Unit]) {
   }
 &nbsp;
-  // do battle on flatland
   doBattle(terrainModifier: string = 'flatland') {
-    // wall: zergling does no damage
-    // h<span class="branch-0 cbranch-no" title="branch not covered" >ill: zerg</span>ling does no da<span class="branch-0 cbranch-no" title="branch not covered" >mage</span>
-<span class="cstat-no" title="statement not covered" >    if (this.units.map(x =&gt; x.name).includes('marine') &amp;&amp;</span>
-      this<span class="branch-0 cbranch-no" title="branch not covered" >.units.ma</span>p(x =&gt; x.name).includes('zergling')
-    ) {
-      const zergling = this.units.find(unit =&gt; unit.name === 'zergling');
+    if (this.units.map(x =&gt; x.name).includes('marine') &amp;&amp;
+      this.uni<span class="branch-0 cbranch-no" title="branch not covered" >ts.map(x </span>=&gt; x.name).incl<span class="branch-0 cbranch-no" title="branch not covered" >udes('zergling')</span>
+<span class="cstat-no" title="statement not covered" >    ) {</span>
+      const zergling = this.units.find(unit =&gt; u<span class="branch-0 cbranch-no" title="branch not covered" >nit.name </span>=== 'zergling');
+      const marine = this.units.find(unit =&gt; unit.name === 'marine');
       if (zergling === undefined) {
         throw new Error('should never happen, the zergling is undefined');
       }
+      if (marine === undefined) {
+        throw new Error('should never happen, the marine is undefined');
+      }
       if (terrainModifier === 'flatland') {
+        marine.health = marine?.health || 0 - 1;
         zergling.health = 0;
       }
       if (terrainModifier === 'wall') {
@@ -561,8 +559,6 @@ export class Battle {
 &nbsp;
       return this.units;
     }
-    // wall: zealot does no damage
-    // hill: zealot does 1 damage to marine
     if (this.units.map(x =&gt; x.name).includes('marine') &amp;&amp;
       this.units.map(x =&gt; x.name).includes('zealot')
     ) {
@@ -586,8 +582,6 @@ export class Battle {
       }
       return this.units;
     }
-    // wall: no change
-    // hill: no change
     if (this.units.map(x =&gt; x.name).includes('zealot') &amp;&amp;
       this.units.map(x =&gt; x.name).includes('zergling')
     ) {
@@ -622,7 +616,7 @@ export class Battle {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-17T17:24:33.322Z
+                at 2025-08-17T17:29:09.471Z
             </div>
         <script src="prettify.js"></script>
         <script>

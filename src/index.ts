@@ -105,18 +105,20 @@ export class Battle {
   constructor(public units: [Unit, Unit]) {
   }
 
-  // do battle on flatland
   doBattle(terrainModifier: string = 'flatland') {
-    // wall: zergling does no damage
-    // hill: zergling does no damage
     if (this.units.map(x => x.name).includes('marine') &&
       this.units.map(x => x.name).includes('zergling')
     ) {
       const zergling = this.units.find(unit => unit.name === 'zergling');
+      const marine = this.units.find(unit => unit.name === 'marine');
       if (zergling === undefined) {
         throw new Error('should never happen, the zergling is undefined');
       }
+      if (marine === undefined) {
+        throw new Error('should never happen, the marine is undefined');
+      }
       if (terrainModifier === 'flatland') {
+        marine.health = marine?.health || 0 - 1;
         zergling.health = 0;
       }
       if (terrainModifier === 'wall') {
@@ -128,8 +130,6 @@ export class Battle {
 
       return this.units;
     }
-    // wall: zealot does no damage
-    // hill: zealot does 1 damage to marine
     if (this.units.map(x => x.name).includes('marine') &&
       this.units.map(x => x.name).includes('zealot')
     ) {
@@ -153,8 +153,6 @@ export class Battle {
       }
       return this.units;
     }
-    // wall: no change
-    // hill: no change
     if (this.units.map(x => x.name).includes('zealot') &&
       this.units.map(x => x.name).includes('zergling')
     ) {
