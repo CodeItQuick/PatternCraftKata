@@ -1,4 +1,4 @@
-﻿import {Marine, PatternCraft, Terrain, Zealot, Zergling} from "../../src";
+﻿import {Battle, Marine, PatternCraft, Terrain, Zealot, Zergling} from "../../src";
 
 describe('Pattern Craft', () => {
   // let theory = [
@@ -65,6 +65,45 @@ describe('Units', () => {
     let zergling = new Zergling();
 
     [zealot, zergling] = zealot.attack(zergling);
+
+    expect(zealot.name).toEqual('zealot');
+    expect(zealot.health).toBeGreaterThan(0);
+    expect(zergling.name).toEqual('zergling');
+    expect(zergling.health).toBeLessThanOrEqual(0);
+  })
+})
+
+describe('Battle', () => {
+  it('battle knows 1 marine beats 1 zergling', () => {
+    let marine = new Marine();
+    let zergling = new Zergling();
+    const battle = new Battle([marine, zergling]);
+
+    [marine, zergling] = battle.doBattle();
+
+    expect(marine.name).toEqual('marine');
+    expect(marine.health).toBeGreaterThan(0);
+    expect(zergling.name).toEqual('zergling');
+    expect(zergling.health).toBeLessThanOrEqual(0);
+  })
+  it('battle knows 1 marine beats 1 zealot', () => {
+    let marine = new Marine();
+    let zealot = new Zealot();
+    const battle = new Battle([marine, zealot]);
+
+    [marine, zealot] = battle.doBattle();
+
+    expect(marine.name).toEqual('marine');
+    expect(marine.health).toBeLessThanOrEqual(0);
+    expect(zealot.name).toEqual('zealot');
+    expect(zealot.health).toBeGreaterThan(0);
+  })
+  it('battle knows 1 zealot beats 1 zergling', () => {
+    let zealot = new Zealot();
+    let zergling = new Zergling();
+    const battle = new Battle([zealot, zergling]);
+
+    [zealot, zergling] = battle.doBattle();
 
     expect(zealot.name).toEqual('zealot');
     expect(zealot.health).toBeGreaterThan(0);

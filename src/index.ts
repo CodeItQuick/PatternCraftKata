@@ -1,27 +1,8 @@
 
 export class PatternCraft {
   takeTurn(units: Unit[]) {
-    // zealot vs 1 zergling
-    if (units.some(unit => unit.name === 'zealot') &&
-        units.some(unit => unit.name === 'zergling')) {
-      const terrain = new Terrain(units);
-      return terrain.flatland();
-    }
-    // zealot vs marine
-    if (units.some(unit => unit.name === 'zealot') &&
-        units.some(unit => unit.name === 'marine')) {
-      const terrain = new Terrain(units);
-      return terrain.flatland();
-    }
-    // marine vs zergling
-    if (units.some(unit => unit.name === 'marine') &&
-      units.some(unit => unit.name === 'zergling')) {
-      const terrain = new Terrain(units);
-      return terrain.flatland();
-    }
-
-    const defaultTerrain = new Terrain(units);
-    return defaultTerrain.flatland();
+    const terrain = new Terrain(units);
+    return terrain.flatland();
   }
 }
 
@@ -83,36 +64,17 @@ export class Terrain {
     return this.units;
   }
   flatland() {
-    // 1 marine 1 zergling
-    if (this.units.some(unit => unit.name === 'marine') &&
-        this.units.some(unit => unit.name === 'zergling')
-    ) {
-      const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zergling !== undefined) {
-        zergling.health = 0;
-      }
-      return this.units;
-    }
-    // 1 marine 1 zealot
-    if (this.units.some(unit => unit.name === 'marine') &&
-        this.units.some(unit => unit.name === 'zealot')
-    ) {
-      const marine = this.units.find(unit => unit.name === 'marine');
-      if (marine !== undefined) {
-        marine.health = 0;
-      }
-      return this.units;
-    }
-    // 1 zealot 1 zergling
-    if (this.units.some(unit => unit.name === 'zealot') &&
-        this.units.some(unit => unit.name === 'zergling')
-    ) {
-      const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zergling !== undefined) {
-        zergling.health = 0;
-      }
-      return this.units;
-    }
+    const heroes = this.units.filter(unit => unit.name === this.units[0].name);
+    const enemies = this.units.filter(unit => unit.name === this.units[this.units.length - 1].name);
+
+    heroes.forEach(hero => {
+      enemies.forEach(enemy => {
+        const battle = new Battle([hero, enemy]);
+        const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle();
+        hero = zealotAfterBattle;
+        enemy = zerglingAfterBattle;
+      })
+    })
 
     return this.units;
   }
@@ -148,5 +110,44 @@ export class Zealot extends Unit {
     super();
     this.health = 3;
     this.name = 'zealot'
+  }
+}
+
+export class Battle {
+  constructor(public units: [Unit, Unit]) {
+  }
+
+  doBattle() {
+    if (this.units.map(x => x.name).includes('marine') &&
+      this.units.map(x => x.name).includes('zergling')
+    ) {
+      const zergling = this.units.find(unit => unit.name === 'zergling');
+      if (zergling !== undefined) {
+        zergling.health = 0;
+      }
+      return this.units;
+    }
+    // 1 marine 1 zealot
+    if (this.units.map(x => x.name).includes('marine') &&
+      this.units.map(x => x.name).includes('zealot')
+    ) {
+      const marine = this.units.find(unit => unit.name === 'marine');
+      if (marine !== undefined) {
+        marine.health = 0;
+      }
+      return this.units;
+    }
+    // 1 zealot 1 zergling
+    if (this.units.map(x => x.name).includes('zealot') &&
+      this.units.map(x => x.name).includes('zergling')
+    ) {
+      const zergling = this.units.find(unit => unit.name === 'zergling');
+      if (zergling !== undefined) {
+        zergling.health = 0;
+      }
+      return this.units;
+    }
+
+    return this.units;
   }
 }
