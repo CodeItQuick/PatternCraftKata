@@ -1,14 +1,13 @@
-
 export class PatternCraft {
   takeTurn(units: Unit[], terrainType: string = 'flatland') {
     const terrain = new Terrain(units);
-    if(terrainType === 'flatland') {
+    if (terrainType === 'flatland') {
       return terrain.flatland();
     }
-    if(terrainType === 'wall') {
+    if (terrainType === 'wall') {
       return terrain.wall();
     }
-    if(terrainType === 'hill') {
+    if (terrainType === 'hill') {
       return terrain.hill();
     }
     return terrain.flatland();
@@ -58,6 +57,7 @@ export class Terrain {
 
     return this.units;
   }
+
   flatland() {
     let heroNames = this.units[0].name;
     let enemyNames = this.units[this.units.length - 1].name;
@@ -94,6 +94,7 @@ export class Marine extends Unit {
     this.name = 'marine'
   }
 }
+
 export class Zergling extends Unit {
   constructor() {
     super();
@@ -115,76 +116,17 @@ export class Battle {
   }
 
   doBattle(terrainModifier: string = 'flatland') {
-    if (this.units.map(x => x.name).includes('marine') &&
-      this.units.map(x => x.name).includes('zergling')
-    ) {
-      const zergling = this.units.find(unit => unit.name === 'zergling');
-      const marine = this.units.find(unit => unit.name === 'marine');
-      if (zergling === undefined) {
-        throw new Error('should never happen, the zergling is undefined');
-      }
-      if (marine === undefined) {
-        throw new Error('should never happen, the marine is undefined');
-      }
-      if (terrainModifier === 'flatland') {
-        marine.health = marine?.health || 0 - 1;
-        zergling.health = 0;
-      }
-      if (terrainModifier === 'wall') {
-        zergling.health = 0;
-      }
-      if (terrainModifier === 'hill') {
-        zergling.health = 0;
-      }
+    const hero = this.units[0];
+    const enemy = this.units[1];
+    if (hero === undefined) {
+      throw new Error('should never happen, the marine is undefined');
+    }
+    if (enemy === undefined) {
+      throw new Error('should never happen, the zergling is undefined');
+    }
 
-      return this.units;
-    }
-    if (this.units.map(x => x.name).includes('marine') &&
-      this.units.map(x => x.name).includes('zealot')
-    ) {
-      const marine = this.units.find(unit => unit.name === 'marine');
-      const zealot = this.units.find(unit => unit.name === 'zealot');
-      if (marine === undefined) {
-        throw new Error('should never happen, the zergling is undefined');
-      }
-      if (zealot === undefined) {
-        throw new Error('should never happen, the zergling is undefined');
-      }
-      if (terrainModifier === 'flatland') {
-        marine.health = 0;
-      }
-      if (terrainModifier === 'wall') {
-        zealot.health = 0;
-      }
-      if (terrainModifier === 'hill') {
-        marine.health = 0;
-        zealot.health = 1;
-      }
-      return this.units;
-    }
-    if (this.units.map(x => x.name).includes('zealot') &&
-      this.units.map(x => x.name).includes('zergling')
-    ) {
-      const zealot = this.units.find(unit => unit.name === 'zealot');
-      const zergling = this.units.find(unit => unit.name === 'zergling');
-      if (zealot === undefined) {
-        throw new Error('should never happen, the zealot is undefined');
-      }
-      if (zergling === undefined) {
-        throw new Error('should never happen, the zergling is undefined');
-      }
-      if (terrainModifier === 'flatland') {
-        zergling.health = 0;
-      }
-      if (terrainModifier === 'wall') {
-        zergling.health = 0;
-      }
-      if (terrainModifier === 'hill') {
-        zealot.health = 2;
-        zergling.health = 0;
-      }
-      return this.units;
-    }
+    const modifier = new TerrainModifier(terrainModifier);
+    modifier.determineDamage([hero, enemy]);
 
     return this.units;
   }
@@ -206,7 +148,7 @@ export class TerrainModifier {
     if (enemy.health === undefined) {
       return [hero, enemy]
     }
-    if (this.modifier == 'wall') {
+    if (this.modifier === 'wall') {
       if (hero.name === 'marine') {
         if (enemy.name === 'zergling' || enemy.name === 'zealot') {
           // hero.health = hero.health;
@@ -217,7 +159,7 @@ export class TerrainModifier {
         return [hero, enemy]
       }
     }
-    if (this.modifier == 'hill') {
+    if (this.modifier === 'hill') {
       if (hero.name === 'marine') {
         if (enemy.name === 'zergling') {
           // hero.health = hero.health;
@@ -233,6 +175,25 @@ export class TerrainModifier {
         hero.health -= 1;
         enemy.health -= 1;
         return [hero, enemy]
+      }
+    }
+    if (this.modifier === 'flatland') {
+      if (hero.name === 'marine') {
+        const damage = enemy.name === 'zealot' ? 2 : 0
+        hero.health = hero?.health - damage;
+      }
+      if (hero.name === 'zealot') {
+        const damage = enemy.name === 'marine' ? 2 : 1
+        hero.health = hero?.health - damage;
+      }
+      if (enemy.name === 'zergling') {
+        enemy.health = 0;
+      }
+      if (enemy.name === 'zealot') {
+        enemy.health = 1;
+      }
+      if (enemy.name === 'zergling') {
+        enemy.health = 0;
       }
     }
     return [hero, enemy]

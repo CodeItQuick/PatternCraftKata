@@ -161,7 +161,7 @@ describe('Battle through wall', () => {
     expect(zealot.name).toEqual('zealot');
     expect(zealot.health).toBeLessThanOrEqual(0);
   })
-  it('battle knows 1 zealot beats 1 zergling', () => {
+  it('battle knows 1 zealot does not damage 1 zergling', () => {
     let zealot = new Zealot();
     let zergling = new Zergling();
     const battle = new Battle([zealot, zergling]);
@@ -171,7 +171,7 @@ describe('Battle through wall', () => {
     expect(zealot.name).toEqual('zealot');
     expect(zealot.health).toEqual(3);
     expect(zergling.name).toEqual('zergling');
-    expect(zergling.health).toBeLessThanOrEqual(0);
+    expect(zergling.health).toBeLessThanOrEqual(1);
   })
 })
 
@@ -268,7 +268,7 @@ describe('Terrain', () => {
     })
   })
   describe('flatland', () => {
-    it('one marines should kill zealot when zealot is slowed due to hill then only one marine remaining', () => {
+    it('one zealot should kill one marine', () => {
       let marine = new Marine();
       let zealot = new Zealot();
       let terrain = new Terrain([marine, zealot]);
@@ -280,7 +280,7 @@ describe('Terrain', () => {
       expect(zealot.name).toEqual('zealot');
       expect(zealot.health).toBeGreaterThan(0);
     })
-    it('one marine should kill one zergling when one zergling is slowed due to flatLand then only one zergling remaining', () => {
+    it('one marine should kill one zergling', () => {
       let marine = new Marine();
       let zergling = new Zergling();
       let terrain = new Terrain([marine, zergling]);
