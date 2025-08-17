@@ -1,3 +1,5 @@
+
+
 export class PatternCraft {
   takeTurn(units: Unit[], terrainType: string = 'flatland') {
     const terrain = new Terrain(units);
@@ -77,40 +79,6 @@ export class Terrain {
   }
 }
 
-export class Unit {
-  health: number | undefined;
-  name: string | undefined;
-
-  attack(unit: Unit) {
-    unit.health = 0;
-    return [this, unit] as Unit[];
-  }
-}
-
-export class Marine extends Unit {
-  constructor() {
-    super();
-    this.health = 2;
-    this.name = 'marine'
-  }
-}
-
-export class Zergling extends Unit {
-  constructor() {
-    super();
-    this.health = 1;
-    this.name = 'zergling'
-  }
-}
-
-export class Zealot extends Unit {
-  constructor() {
-    super();
-    this.health = 3;
-    this.name = 'zealot'
-  }
-}
-
 export class Battle {
   constructor(public units: [Unit, Unit]) {
   }
@@ -119,10 +87,10 @@ export class Battle {
     const hero = this.units[0];
     const enemy = this.units[1];
     if (hero === undefined) {
-      throw new Error('should never happen, the marine is undefined');
+      throw new Error(`should never happen, the hero is undefined`);
     }
     if (enemy === undefined) {
-      throw new Error('should never happen, the zergling is undefined');
+      throw new Error('should never happen, the enemy is undefined');
     }
 
     const modifier = new TerrainModifier(terrainModifier);
@@ -196,5 +164,39 @@ export class TerrainModifier {
       }
     }
     return [hero, enemy]
+  }
+}
+
+export class Unit {
+  health: number | undefined;
+  name: string | undefined;
+
+  attack(unit: Unit) {
+    unit.health = 0;
+    return [this, unit] as Unit[];
+  }
+}
+
+export class Marine extends Unit {
+  constructor() {
+    super();
+    this.health = 2;
+    this.name = 'marine'
+  }
+}
+
+export class Zergling extends Unit {
+  constructor() {
+    super();
+    this.health = 1;
+    this.name = 'zergling'
+  }
+}
+
+export class Zealot extends Unit {
+  constructor() {
+    super();
+    this.health = 3;
+    this.name = 'zealot'
   }
 }
