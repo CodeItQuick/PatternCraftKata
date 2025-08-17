@@ -1,4 +1,4 @@
-﻿import {Battle, Marine, PatternCraft, Terrain, Zealot, Zergling} from "../../src";
+﻿import {Battle, Marine, PatternCraft, Terrain, TerrainModifier, Zealot, Zergling} from "../../src";
 
 describe('Pattern Craft', () => {
   // let theory = [
@@ -269,4 +269,73 @@ describe('Terrain', () => {
       expect(zergling.health).toBeLessThanOrEqual(0);
     })
   })
+})
+
+describe('TerrainModifiers', () => {
+  it('wall modifier determines damage between zergling and marine', () => {
+    const terrainModifier = new TerrainModifier('wall');
+    let marine = new Marine();
+    let zergling = new Zergling();
+
+    const [marineAfterBattle, zerglingAfterBattle] = terrainModifier.determineDamage([marine, zergling]);
+
+    expect(marineAfterBattle.health).toEqual(2)
+    expect(zerglingAfterBattle.health).toEqual(0)
+  })
+  it('wall modifier determines damage between marine and zealot', () => {
+    const terrainModifier = new TerrainModifier('wall');
+    let marine = new Marine();
+    let zealot = new Zealot();
+
+    const [marineAfterBattle, zealotAfterBattle] = terrainModifier.determineDamage([marine, zealot]);
+
+    expect(marineAfterBattle.health).toEqual(2)
+    expect(zealotAfterBattle.health).toEqual(0)
+  })
+  it('wall modifier determines damage between zealot and zergling', () => {
+    const terrainModifier = new TerrainModifier('wall');
+    let zealot = new Zealot();
+    let zergling = new Zergling();
+
+    const [zealotAfterBattle, zerglingAfterBattle] = terrainModifier.determineDamage([zealot, zergling]);
+
+    expect(zealotAfterBattle.health).toEqual(3)
+    expect(zerglingAfterBattle.health).toEqual(1)
+  })
+  it('hill modifier determines damage between zergling and marine', () => {
+    const terrainModifier = new TerrainModifier('hill');
+    let marine = new Marine();
+    let zergling = new Zergling();
+
+    const [marineAfterBattle, zerglingAfterBattle] = terrainModifier.determineDamage([marine, zergling]);
+
+    expect(marineAfterBattle.health).toEqual(2)
+    expect(zerglingAfterBattle.health).toEqual(0)
+  })
+  it('hill modifier determines damage between marine and zealot', () => {
+    const terrainModifier = new TerrainModifier('hill');
+    let marine = new Marine();
+    let zealot = new Zealot();
+
+    const [marineAfterBattle, zealotAfterBattle] = terrainModifier.determineDamage([marine, zealot]);
+
+    expect(marineAfterBattle.health).toEqual(0)
+    expect(zealotAfterBattle.health).toEqual(1)
+  })
+  it('hill modifier determines damage between zealot and zergling', () => {
+    const terrainModifier = new TerrainModifier('hill');
+    let zealot = new Zealot();
+    let zergling = new Zergling();
+
+    const [zealotAfterBattle, zerglingAfterBattle] = terrainModifier.determineDamage([zealot, zergling]);
+
+    expect(zealotAfterBattle.health).toEqual(2)
+    expect(zerglingAfterBattle.health).toEqual(0)
+  })
+  // it('flatland modifier determines damage between zergling and marine', () => {
+  // })
+  // it('flatland modifier determines damage between marine and zealot', () => {
+  // })
+  // it('flatland modifier determines damage between zealot and zergling', () => {
+  // })
 })

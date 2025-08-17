@@ -180,3 +180,51 @@ export class Battle {
     return this.units;
   }
 }
+
+export class TerrainModifier {
+  public modifier: string;
+
+  constructor(modifier: string) {
+    this.modifier = modifier;
+
+  }
+
+  determineDamage([hero, enemy]: [Unit, Unit]): [Unit, Unit] {
+    if (hero.health === undefined) {
+      return [hero, enemy]
+    }
+    if (enemy.health === undefined) {
+      return [hero, enemy]
+    }
+    if (this.modifier == 'wall') {
+      if (hero.name === 'marine') {
+        if (enemy.name === 'zergling' || enemy.name === 'zealot') {
+          // hero.health = hero.health;
+          enemy.health = 0;
+          return [hero, enemy];
+        }
+      } else {
+        return [hero, enemy]
+      }
+    }
+    if (this.modifier == 'hill') {
+      if (hero.name === 'marine') {
+        if (enemy.name === 'zergling') {
+          // hero.health = hero.health;
+          enemy.health = 0;
+          return [hero, enemy];
+        }
+        if (enemy.name === 'zealot') {
+          hero.health -= hero.health;
+          enemy.health = enemy.health - 2;
+          return [hero, enemy];
+        }
+      } else {
+        hero.health -= 1;
+        enemy.health -= 1;
+        return [hero, enemy]
+      }
+    }
+    return [hero, enemy]
+  }
+}
