@@ -3,16 +3,7 @@
 export class PatternCraft {
   takeTurn(units: Unit[], terrainType: string = 'flatland') {
     const terrain = new Terrain(units);
-    if (terrainType === 'flatland') {
-      return terrain.flatland();
-    }
-    if (terrainType === 'wall') {
-      return terrain.wall();
-    }
-    if (terrainType === 'hill') {
-      return terrain.hill();
-    }
-    return terrain.flatland();
+    return terrain.fight(terrainType);
   }
 }
 
@@ -20,7 +11,7 @@ export class Terrain {
   constructor(public units: Unit[]) {
   }
 
-  wall() {
+  fight(terrainType: string) {
     let heroNames = this.units[0].name;
     let enemyNames = this.units[this.units.length - 1].name;
     const heroes = this.units.filter(unit => unit.name === heroNames);
@@ -30,48 +21,8 @@ export class Terrain {
       enemies.forEach(enemy => {
         if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
           const battle = new Battle([hero, enemy]);
-          const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle('wall');
-          hero = zealotAfterBattle;
-          enemy = zerglingAfterBattle;
+          this.units = battle.doBattle(terrainType);
         }
-      })
-    })
-
-    return this.units;
-  }
-
-  hill() {
-    let heroNames = this.units[0].name;
-    let enemyNames = this.units[this.units.length - 1].name;
-    const heroes = this.units.filter(unit => unit.name === heroNames);
-    const enemies = this.units.filter(unit => unit.name === enemyNames);
-
-    heroes.forEach(hero => {
-      enemies.forEach(enemy => {
-        if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
-          const battle = new Battle([hero, enemy]);
-          const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle('hill');
-          hero = zealotAfterBattle;
-          enemy = zerglingAfterBattle;
-        }
-      })
-    })
-
-    return this.units;
-  }
-
-  flatland() {
-    let heroNames = this.units[0].name;
-    let enemyNames = this.units[this.units.length - 1].name;
-    const heroes = this.units.filter(unit => unit.name === heroNames);
-    const enemies = this.units.filter(unit => unit.name === enemyNames);
-
-    heroes.forEach(hero => {
-      enemies.forEach(enemy => {
-        const battle = new Battle([hero, enemy]);
-        const [zealotAfterBattle, zerglingAfterBattle] = battle.doBattle('flatland');
-        hero = zealotAfterBattle;
-        enemy = zerglingAfterBattle;
       })
     })
 
@@ -177,6 +128,14 @@ export class Unit {
   }
 }
 
+export class Zealot extends Unit {
+  constructor() {
+    super();
+    this.health = 3;
+    this.name = 'zealot'
+  }
+}
+
 export class Marine extends Unit {
   constructor() {
     super();
@@ -193,10 +152,3 @@ export class Zergling extends Unit {
   }
 }
 
-export class Zealot extends Unit {
-  constructor() {
-    super();
-    this.health = 3;
-    this.name = 'zealot'
-  }
-}

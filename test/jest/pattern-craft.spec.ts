@@ -221,7 +221,7 @@ describe('Terrain', () => {
       let zealot = new Zealot();
       let terrain = new Terrain([marine, zealot]);
 
-      [marine, zealot] = terrain.wall();
+      [marine, zealot] = terrain.fight('wall');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeGreaterThan(0);
@@ -233,7 +233,7 @@ describe('Terrain', () => {
       let zergling = new Zergling();
       let terrain = new Terrain([marine, zergling]);
 
-      [marine, zergling] = terrain.wall();
+      [marine, zergling] = terrain.fight('wall');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeGreaterThan(0);
@@ -247,7 +247,7 @@ describe('Terrain', () => {
       let zealot = new Zealot();
       let terrain = new Terrain([marineOne, zealot]);
 
-      [marineOne, zealot] = terrain.hill();
+      [marineOne, zealot] = terrain.fight('hill');
 
       expect(marineOne.name).toEqual('marine');
       expect(marineOne.health).toBeLessThanOrEqual(0);
@@ -259,7 +259,7 @@ describe('Terrain', () => {
       let zergling = new Zergling();
       let terrain = new Terrain([marine, zergling]);
 
-      [marine, zergling] = terrain.hill();
+      [marine, zergling] = terrain.fight('hill');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBe(2);
@@ -273,7 +273,7 @@ describe('Terrain', () => {
       let zealot = new Zealot();
       let terrain = new Terrain([marine, zealot]);
 
-      [marine, zealot] = terrain.flatland();
+      [marine, zealot] = terrain.fight('flatland');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeLessThanOrEqual(0);
@@ -285,7 +285,7 @@ describe('Terrain', () => {
       let zergling = new Zergling();
       let terrain = new Terrain([marine, zergling]);
 
-      [marine, zergling] = terrain.flatland();
+      [marine, zergling] = terrain.fight('flatland');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeGreaterThan(0);
