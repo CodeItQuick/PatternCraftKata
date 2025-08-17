@@ -1,33 +1,27 @@
 
 export class PatternCraft {
   takeTurn(units: Unit[]) {
-    // zealot vs 2 zerglings
+    // zealot vs 1 zergling
     if (units.some(unit => unit.name === 'zealot') &&
-        units.some(unit => unit.name === 'zergling') &&
-        units.filter(unit => unit.name === 'zergling').length == 2) {
-      return [{
-        name: 'zergling',
-        health: 1
-      }];
+        units.some(unit => unit.name === 'zergling')) {
+      const terrain = new Terrain(units);
+      return terrain.flatland();
     }
     // zealot vs marine
     if (units.some(unit => unit.name === 'zealot') &&
         units.some(unit => unit.name === 'marine')) {
-      return [{
-        name: 'zealot',
-        health: 1
-      }];
+      const terrain = new Terrain(units);
+      return terrain.flatland();
     }
     // marine vs zergling
     if (units.some(unit => unit.name === 'marine') &&
       units.some(unit => unit.name === 'zergling')) {
-      return [{
-        name: 'marine',
-        health: 1
-      }];
+      const terrain = new Terrain(units);
+      return terrain.flatland();
     }
 
-    return units;
+    const defaultTerrain = new Terrain(units);
+    return defaultTerrain.flatland();
   }
 }
 
@@ -109,8 +103,8 @@ export class Terrain {
       }
       return this.units;
     }
-    // 1 marine 1 zergling
-    if (this.units.some(unit => unit.name === 'marine') &&
+    // 1 zealot 1 zergling
+    if (this.units.some(unit => unit.name === 'zealot') &&
         this.units.some(unit => unit.name === 'zergling')
     ) {
       const zergling = this.units.find(unit => unit.name === 'zergling');

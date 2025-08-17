@@ -23,15 +23,16 @@ describe('Pattern Craft', () => {
       expect(units[0].health).toBeGreaterThan(0);
       expect(units[0].name).toBe('zealot');
     })
-    it(`zerg should defeat zealot when two zergling fight one zealot`, () => {
+    it(`zealot should defeat zerg`, () => {
       const patternCraft = new PatternCraft();
 
       const units = patternCraft.takeTurn(
-        [new Zealot(), new Zergling(), new Zergling()]);
+        [new Zealot(), new Zergling()]);
 
+      expect(units[0].name).toBe('zealot');
       expect(units[0].health).toBeGreaterThan(0);
-      expect(units[0].name).toBe('zergling');
-      expect(units.length).toBe(1);
+      expect(units[1].name).toBe('zergling');
+      expect(units[1].health).toBeLessThanOrEqual(0);
     })
   // })
 })
