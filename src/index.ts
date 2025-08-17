@@ -132,7 +132,6 @@ export class Battle {
   }
 }
 
-// TODO: this is not connected to the main program
 export class TerrainModifier {
   public modifier: string;
 
