@@ -67,52 +67,35 @@ export class TerrainModifier {
       return [hero, enemy]
     }
     if (this.modifier === 'wall') {
-      if (hero.name === 'marine') {
-        if (enemy.name === 'zergling' || enemy.name === 'zealot') {
-          // hero.health = hero.health;
-          enemy.health = 0;
-          return [hero, enemy];
-        }
-      } else {
-        return [hero, enemy]
+      let heroDamage = enemy.health;
+      let enemyDamage = hero.health;
+      if (enemy.name === 'zergling' || enemy.name === 'zealot') {
+        enemyDamage = 0;
       }
+      if (hero.name === 'zergling' || hero.name === 'zealot') {
+        heroDamage = 0;
+      }
+      hero.health = hero?.health - enemyDamage;
+      enemy.health = enemy.health - heroDamage;
+
+      return [hero, enemy]
     }
     if (this.modifier === 'hill') {
-      if (hero.name === 'marine') {
-        if (enemy.name === 'zergling') {
-          // hero.health = hero.health;
-          enemy.health = 0;
-          return [hero, enemy];
-        }
-        if (enemy.name === 'zealot') {
-          hero.health -= hero.health;
-          enemy.health = enemy.health - 2;
-          return [hero, enemy];
-        }
-      } else {
-        hero.health -= 1;
-        enemy.health -= 1;
-        return [hero, enemy]
+      let heroDamage = hero.damage;
+      let enemyDamage = enemy.damage;
+      if (hero.name === 'marine' && enemy.name === 'zergling') {
+        enemyDamage = enemyDamage - 1;
+      } else if (hero.name === 'zergling' && enemy.name === 'marine') {
+        heroDamage = heroDamage - 1;
       }
+      hero.health = hero?.health - enemyDamage;
+      enemy.health = enemy.health - heroDamage;
+
+      return [hero, enemy]
     }
     if (this.modifier === 'flatland') {
-      if (hero.name === 'marine') {
-        const damage = enemy.name === 'zealot' ? 2 : 0
-        hero.health = hero?.health - damage;
-      }
-      if (hero.name === 'zealot') {
-        const damage = enemy.name === 'marine' ? 2 : 1
-        hero.health = hero?.health - damage;
-      }
-      if (enemy.name === 'zergling') {
-        enemy.health = 0;
-      }
-      if (enemy.name === 'zealot') {
-        enemy.health = 1;
-      }
-      if (enemy.name === 'zergling') {
-        enemy.health = 0;
-      }
+      hero.health = hero?.health - enemy.damage;
+      enemy.health = enemy.health - hero.damage;
     }
     return [hero, enemy]
   }
@@ -121,6 +104,7 @@ export class TerrainModifier {
 export class Unit {
   health: number | undefined;
   name: string | undefined;
+  damage: number = 0;
 
   attack(unit: Unit) {
     unit.health = 0;
@@ -132,7 +116,8 @@ export class Zealot extends Unit {
   constructor() {
     super();
     this.health = 3;
-    this.name = 'zealot'
+    this.damage = 2;
+    this.name = 'zealot';
   }
 }
 
@@ -140,6 +125,7 @@ export class Marine extends Unit {
   constructor() {
     super();
     this.health = 2;
+    this.damage = 2;
     this.name = 'marine'
   }
 }
@@ -148,6 +134,7 @@ export class Zergling extends Unit {
   constructor() {
     super();
     this.health = 1;
+    this.damage = 1;
     this.name = 'zergling'
   }
 }

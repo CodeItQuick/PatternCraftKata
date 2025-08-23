@@ -12,7 +12,7 @@ describe('Pattern Craft', () => {
 
       const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling]);
 
-      expect(marineAfterBattle.health).toEqual(2);
+      expect(marineAfterBattle.health).toEqual(1);
       expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
 
     })
@@ -137,41 +137,23 @@ describe('Battle on flatland', () => {
 })
 
 describe('Battle through wall', () => {
-  it('battle knows 1 marine beats 1 zergling', () => {
-    let marine = new Marine();
-    let zergling = new Zergling();
-    const battle = new Battle([marine, zergling]);
+  [
+    { hero: new Marine(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0 },
+    { hero: new Marine(), enemy: new Zealot(), heroHealth: 2, enemyHealth: 0 },
+    { hero: new Zergling(), enemy: new Marine(), heroHealth: 0, enemyHealth: 2 },
+    { hero: new Zealot(), enemy: new Marine(), heroHealth: 0, enemyHealth: 2 },
+    { hero: new Zergling(), enemy: new Zealot(), heroHealth: 1, enemyHealth: 3 },
+    { hero: new Zealot(), enemy: new Zergling(), heroHealth: 3, enemyHealth: 1 },
+  ].forEach(({ enemy, hero, heroHealth, enemyHealth }) => {
+    it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
+      const battle = new Battle([hero, enemy]);
 
-    [marine, zergling] = battle.doBattle('wall');
+      [hero, enemy] = battle.doBattle('wall');
 
-    expect(marine.name).toEqual('marine');
-    expect(marine.health).toEqual(2);
-    expect(zergling.name).toEqual('zergling');
-    expect(zergling.health).toBeLessThanOrEqual(0);
-  })
-  it('battle knows 1 marine beats 1 zealot', () => {
-    let marine = new Marine();
-    let zealot = new Zealot();
-    const battle = new Battle([marine, zealot]);
+      expect(hero.health).toEqual(heroHealth);
+      expect(enemy.health).toEqual(enemyHealth);
+    })
 
-    [marine, zealot] = battle.doBattle('wall');
-
-    expect(marine.name).toEqual('marine');
-    expect(marine.health).toEqual(2);
-    expect(zealot.name).toEqual('zealot');
-    expect(zealot.health).toBeLessThanOrEqual(0);
-  })
-  it('battle knows 1 zealot does not damage 1 zergling', () => {
-    let zealot = new Zealot();
-    let zergling = new Zergling();
-    const battle = new Battle([zealot, zergling]);
-
-    [zealot, zergling] = battle.doBattle('wall');
-
-    expect(zealot.name).toEqual('zealot');
-    expect(zealot.health).toEqual(3);
-    expect(zergling.name).toEqual('zergling');
-    expect(zergling.health).toBeLessThanOrEqual(1);
   })
 })
 
@@ -211,6 +193,43 @@ describe('Battle through hill', () => {
     expect(zealot.health).toEqual(2);
     expect(zergling.name).toEqual('zergling');
     expect(zergling.health).toBeLessThanOrEqual(0);
+  })
+  it('battle knows 1 zergling beats 1 zealot', () => {
+    let zergling = new Zergling();
+    let zealot = new Zealot();
+    const battle = new Battle([zergling, zealot]);
+
+    [zergling, zealot] = battle.doBattle('hill');
+
+    expect(zealot.name).toEqual('zealot');
+    expect(zealot.health).toEqual(2);
+    expect(zergling.name).toEqual('zergling');
+    expect(zergling.health).toBeLessThanOrEqual(0);
+  })
+
+  it('battle knows 1 zergling beats 1 marine', () => {
+    let zergling = new Zergling();
+    let marine = new Marine();
+    const battle = new Battle([zergling, marine]);
+
+    [zergling, marine] = battle.doBattle('hill');
+
+    expect(marine.name).toEqual('marine');
+    expect(marine.health).toEqual(2);
+    expect(zergling.name).toEqual('zergling');
+    expect(zergling.health).toBeLessThanOrEqual(0);
+  })
+  it('battle knows 1 zealot beats 1 marine', () => {
+    let zealot = new Zealot();
+    let marine = new Marine();
+    const battle = new Battle([zealot, marine]);
+
+    [zealot, marine] = battle.doBattle('hill');
+
+    expect(marine.name).toEqual('marine');
+    expect(marine.health).toBeLessThanOrEqual(0);
+    expect(zealot.name).toEqual('zealot');
+    expect(zealot.health).toEqual(1);
   })
 })
 
@@ -334,7 +353,7 @@ describe('TerrainModifiers', () => {
     const [marineAfterBattle, zerglingAfterBattle] = terrainModifier.determineDamage([marine, zergling]);
 
     expect(marineAfterBattle.health).toEqual(2)
-    expect(zerglingAfterBattle.health).toEqual(0)
+    expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0)
   })
   it('hill modifier determines damage between marine and zealot', () => {
     const terrainModifier = new TerrainModifier('hill');
@@ -354,7 +373,7 @@ describe('TerrainModifiers', () => {
     const [zealotAfterBattle, zerglingAfterBattle] = terrainModifier.determineDamage([zealot, zergling]);
 
     expect(zealotAfterBattle.health).toEqual(2)
-    expect(zerglingAfterBattle.health).toEqual(0)
+    expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0)
   })
   // it('flatland modifier determines damage between zergling and marine', () => {
   // })
