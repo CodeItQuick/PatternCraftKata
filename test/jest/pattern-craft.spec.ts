@@ -3,51 +3,44 @@ import exp = require("node:constants");
 
 describe('Pattern Craft', () => {
   it(`marine should defeat zerg when one marine fight one zergling`, () => {
-    const patternCraft = new PatternCraft();
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = patternCraft.takeTurn([marine, zergling]);
+    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = PatternCraft([marine, zergling]);
 
     expect(marineAfterBattle[0].health).toEqual(1);
     expect(zerglingAfterBattle[0].health).toBeLessThanOrEqual(0);
 
   })
   it(`With a wall, a marine should defeat zerg when one marine fight one zergling`, () => {
-    const patternCraft = new PatternCraft();
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = patternCraft.takeTurn([marine, zergling], 'wall');
+    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = PatternCraft([marine, zergling], 'wall');
 
     expect(marineAfterBattle[0].health).toEqual(2);
     expect(zerglingAfterBattle[0].health).toBeLessThanOrEqual(0);
 
   })
   it(`On a hill, marine should defeat zerg when one marine fight one zergling`, () => {
-    const patternCraft = new PatternCraft();
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = patternCraft.takeTurn([marine, zergling], 'hill');
+    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = PatternCraft([marine, zergling], 'hill');
 
     expect(marineAfterBattle[0].health).toEqual(2);
     expect(zerglingAfterBattle[0].health).toBeLessThanOrEqual(0);
 
   })
   it(`zealot should defeat marine when one zealot fight one marine`, () => {
-    const patternCraft = new PatternCraft();
-
-    const units = patternCraft.takeTurn(
+    const units = PatternCraft(
       [new Zealot(), new Marine()]);
 
     expect(units.heroes[0].health).toBeGreaterThan(0);
     expect(units.heroes[0].name).toBe('zealot');
   })
   it(`zealot should defeat zerg`, () => {
-    const patternCraft = new PatternCraft();
-
-    const units = patternCraft.takeTurn(
+    const units = PatternCraft(
       [new Zealot(), new Zergling()]);
 
     expect(units.heroes[0].name).toBe('zealot');

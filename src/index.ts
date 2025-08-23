@@ -1,9 +1,12 @@
 
 
-export class PatternCraft {
-  takeTurn(units: Unit[], terrainType: string = 'flatland') {
-    return Terrain([units[0]], [units[1]], terrainType);
-  }
+export const PatternCraft = (units: Unit[], terrainType: string = 'flatland') => {
+  const heroRace = units[0].name
+  const enemyRace = units[units.length - 1].name
+  const heroes = units.filter(unit => unit.name === heroRace)
+  const enemies = units.filter(unit => unit.name === enemyRace)
+
+  return Terrain(heroes, enemies, terrainType);
 }
 
 // TODO: Multiple Micromanaged Enemies
