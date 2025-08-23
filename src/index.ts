@@ -2,27 +2,29 @@
 
 export class PatternCraft {
   takeTurn(units: Unit[], terrainType: string = 'flatland') {
-    return Terrain(units, terrainType);
+    return Terrain([units[0]], [units[1]], terrainType);
   }
 }
 
 // TODO: Multiple Enemies
-export const Terrain = (units: Unit[], terrainType: string): Unit[] => {
-  let heroNames = units[0].name;
-  let enemyNames = units[units.length - 1].name;
-  const heroes = units.filter(unit => unit.name === heroNames);
-  const enemies = units.filter(unit => unit.name === enemyNames);
-
+export const Terrain = (heroes: Unit[], enemies: Unit[], terrainType: string):
+  { heroes: Unit[], enemies: Unit[] } => {
+  let heroResults: Unit[] = [], enemyResults: Unit[] = [];
   heroes.forEach(hero => {
     enemies.forEach(enemy => {
-      if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
+      if (hero.health > 0 && enemy.health > 0) {
         const battle = new Battle([hero, enemy]);
-        units = battle.doBattle(terrainType);
+        const [heroResult, enemyResult] = battle.doBattle(terrainType);
+        heroResults.push(heroResult);
+        enemyResults.push(enemyResult);
+      } else if (hero.health > 0) {
+        heroResults.push(hero);
+      } else if (enemy.health > 0) {
+        enemyResults.push(enemy)
       }
     })
   })
-
-  return units;
+  return { enemies: enemyResults, heroes: heroResults };
 }
 
 export class Battle {
@@ -93,7 +95,7 @@ export class Unit {
       enemyDamage = 0;
     }
     this.health = this.health - enemyDamage;
-    if (this.health < 0) {
+    if (this.health < 0 || this.health === undefined) {
       this.health = 0;
     }
     return this;

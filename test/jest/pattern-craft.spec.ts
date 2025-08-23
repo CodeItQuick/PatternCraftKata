@@ -1,4 +1,5 @@
 ﻿import {Battle, Marine, PatternCraft, Terrain, TerrainModifier, Zealot, Zergling} from "../../src";
+import exp = require("node:constants");
 
 describe('Pattern Craft', () => {
   // let theory = [
@@ -10,10 +11,10 @@ describe('Pattern Craft', () => {
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling]);
+    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = patternCraft.takeTurn([marine, zergling]);
 
-    expect(marineAfterBattle.health).toEqual(1);
-    expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
+    expect(marineAfterBattle[0].health).toEqual(1);
+    expect(zerglingAfterBattle[0].health).toBeLessThanOrEqual(0);
 
   })
   it(`With a wall, a marine should defeat zerg when one marine fight one zergling`, () => {
@@ -21,10 +22,10 @@ describe('Pattern Craft', () => {
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling], 'wall');
+    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = patternCraft.takeTurn([marine, zergling], 'wall');
 
-    expect(marineAfterBattle.health).toEqual(2);
-    expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
+    expect(marineAfterBattle[0].health).toEqual(2);
+    expect(zerglingAfterBattle[0].health).toBeLessThanOrEqual(0);
 
   })
   it(`On a hill, marine should defeat zerg when one marine fight one zergling`, () => {
@@ -32,10 +33,10 @@ describe('Pattern Craft', () => {
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const [marineAfterBattle, zerglingAfterBattle] = patternCraft.takeTurn([marine, zergling], 'hill');
+    const { heroes: marineAfterBattle, enemies: zerglingAfterBattle } = patternCraft.takeTurn([marine, zergling], 'hill');
 
-    expect(marineAfterBattle.health).toEqual(2);
-    expect(zerglingAfterBattle.health).toBeLessThanOrEqual(0);
+    expect(marineAfterBattle[0].health).toEqual(2);
+    expect(zerglingAfterBattle[0].health).toBeLessThanOrEqual(0);
 
   })
   it(`zealot should defeat marine when one zealot fight one marine`, () => {
@@ -44,8 +45,8 @@ describe('Pattern Craft', () => {
     const units = patternCraft.takeTurn(
       [new Zealot(), new Marine()]);
 
-    expect(units[0].health).toBeGreaterThan(0);
-    expect(units[0].name).toBe('zealot');
+    expect(units.heroes[0].health).toBeGreaterThan(0);
+    expect(units.heroes[0].name).toBe('zealot');
   })
   it(`zealot should defeat zerg`, () => {
     const patternCraft = new PatternCraft();
@@ -53,10 +54,10 @@ describe('Pattern Craft', () => {
     const units = patternCraft.takeTurn(
       [new Zealot(), new Zergling()]);
 
-    expect(units[0].name).toBe('zealot');
-    expect(units[0].health).toBeGreaterThan(0);
-    expect(units[1].name).toBe('zergling');
-    expect(units[1].health).toBeLessThanOrEqual(0);
+    expect(units.heroes[0].name).toBe('zealot');
+    expect(units.heroes[0].health).toBeGreaterThan(0);
+    expect(units.enemies[0].name).toBe('zergling');
+    expect(units.enemies[0].health).toBeLessThanOrEqual(0);
   })
   // })
 })
@@ -162,92 +163,46 @@ describe('Battle', () => {
 
 describe('Terrain', () => {
   [
-    { hero: new Marine(), enemy: new Zealot(), terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
-    { hero: new Marine(), enemy: new Zergling(), terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
-    { hero: new Zealot(), enemy: new Marine(), terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
-    { hero: new Zergling(), enemy: new Marine(), terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
-    { hero: new Zealot(), enemy: new Zergling(), terrainType: 'wall', heroHealth: 3, enemyHealth: 1 },
-    { hero: new Zergling(), enemy: new Zealot(), terrainType: 'wall', heroHealth: 1, enemyHealth: 3 },
-    { hero: new Marine(), enemy: new Zealot(), terrainType: 'hill', heroHealth: 0, enemyHealth: 1 },
-    { hero: new Marine(), enemy: new Zergling(), terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
-    { hero: new Zealot(), enemy: new Marine(), terrainType: 'hill', heroHealth: 1, enemyHealth: 0 },
-    { hero: new Zergling(), enemy: new Marine(), terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
-    { hero: new Zealot(), enemy: new Zergling(), terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
-    { hero: new Zergling(), enemy: new Zealot(), terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
-    { hero: new Marine(), enemy: new Zealot(), terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
-    { hero: new Marine(), enemy: new Zergling(), terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
-    { hero: new Zealot(), enemy: new Marine(), terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
-    { hero: new Zergling(), enemy: new Marine(), terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
-    { hero: new Zealot(), enemy: new Zergling(), terrainType: 'flatland', heroHealth: 2, enemyHealth: 0 },
-    { hero: new Zergling(), enemy: new Zealot(), terrainType: 'flatland', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Marine()], enemy: [new Zealot()], terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
+    { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
+    { hero: [new Zealot()], enemy: [new Marine()], terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Zergling()], enemy: [new Marine()], terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'wall', heroHealth: 3, enemyHealth: 1 },
+    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'wall', heroHealth: 1, enemyHealth: 3 },
+    { hero: [new Marine()], enemy: [new Zealot()], terrainType: 'hill', heroHealth: 0, enemyHealth: 1 },
+    { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
+    { hero: [new Zealot()], enemy: [new Marine()], terrainType: 'hill', heroHealth: 1, enemyHealth: 0 },
+    { hero: [new Zergling()], enemy: [new Marine()], terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
+    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Marine()], enemy: [new Zealot()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
+    { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
+    { hero: [new Zealot()], enemy: [new Marine()], terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
+    { hero: [new Zergling()], enemy: [new Marine()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
+    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'flatland', heroHealth: 2, enemyHealth: 0 },
+    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 2 },
   ].forEach(({hero, enemy, terrainType, heroHealth, enemyHealth}) => {
-    it(`${hero.name} should battle ${enemy.name} with terrain modifier ${terrainType}`, () => {
+    it(`${hero[0].name} should battle ${enemy[0].name} with terrain modifier ${terrainType}`, () => {
 
-      [hero, enemy] = Terrain([hero, enemy], terrainType);
+      const { heroes, enemies } = Terrain(hero, enemy, terrainType);
 
-      expect(hero.health).toEqual(heroHealth);
-      expect(enemy.health).toEqual(enemyHealth);
-    })
-  })
-  describe('wall', () => {
-    it('marine should kill zergling when only marine has vision of zergling due to wall', () => {
-      let marine = new Marine();
-      let zergling = new Zergling();
+      expect(heroes[0].health).toEqual(heroHealth);
+      expect(enemies[0].health).toEqual(enemyHealth);
+    });
+  });
+  [
+    { heroes: [new Marine(), new Marine()], enemies: [new Zealot()], terrainType: 'wall', heroHealth: [2, 2], enemyHealth: [0] },
+    { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'wall', heroHealth: [2], enemyHealth: [0, 0] },
+    { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'hill', heroHealth: [2], enemyHealth: [0, 0] },
+    { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0] },
+    { heroes: [new Marine()], enemies: [new Zergling(), new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0, 1] },
+  ].forEach(({heroes, enemies, terrainType, heroHealth, enemyHealth}) => {
+    it(`${heroes.length} number of heroes should battle ${enemies.length} with terrain modifier ${terrainType}`, () => {
 
-      [marine, zergling] = Terrain([marine, zergling], 'wall');
+      const { heroes: heroResult, enemies: enemyResult } = Terrain(heroes, enemies, terrainType);
 
-      expect(marine.name).toEqual('marine');
-      expect(marine.health).toBeGreaterThan(0);
-      expect(zergling.name).toEqual('zergling');
-      expect(zergling.health).toBeLessThanOrEqual(0);
-    })
-  })
-  describe('hill', () => {
-    it('one marine should kill zealot when zealot is slowed due to hill then only one marine remaining', () => {
-      let marineOne = new Marine();
-      let zealot = new Zealot();
-
-      [marineOne, zealot] = Terrain([marineOne, zealot], 'hill');
-
-      expect(marineOne.name).toEqual('marine');
-      expect(marineOne.health).toBeLessThanOrEqual(0);
-      expect(zealot.name).toEqual('zealot');
-      expect(zealot.health).toBe(1);
-    })
-    it('marine should kill one zergling when one zergling is slowed due to hill then only one zergling remaining', () => {
-      let marine = new Marine();
-      let zergling = new Zergling();
-
-      [marine, zergling] = Terrain([marine, zergling], 'hill');
-
-      expect(marine.name).toEqual('marine');
-      expect(marine.health).toBe(2);
-      expect(zergling.name).toEqual('zergling');
-      expect(zergling.health).toBeLessThanOrEqual(0);
-    })
-  })
-  describe('flatland', () => {
-    it('one zealot should kill one marine', () => {
-      let marine = new Marine();
-      let zealot = new Zealot();
-
-      [marine, zealot] = Terrain([marine, zealot], 'flatland');
-
-      expect(marine.name).toEqual('marine');
-      expect(marine.health).toBeLessThanOrEqual(0);
-      expect(zealot.name).toEqual('zealot');
-      expect(zealot.health).toBeGreaterThan(0);
-    })
-    it('one marine should kill one zergling', () => {
-      let marine = new Marine();
-      let zergling = new Zergling();
-
-      [marine, zergling] = Terrain([marine, zergling], 'flatland');
-
-      expect(marine.name).toEqual('marine');
-      expect(marine.health).toBeGreaterThan(0);
-      expect(zergling.name).toEqual('zergling');
-      expect(zergling.health).toBeLessThanOrEqual(0);
+      heroHealth.forEach((hero, idx) => expect(heroes[idx].health).toEqual(hero))
+      enemyHealth.forEach((enemy, idx) => expect(enemies[idx].health).toEqual(enemy))
     })
   })
 })
