@@ -2,32 +2,27 @@
 
 export class PatternCraft {
   takeTurn(units: Unit[], terrainType: string = 'flatland') {
-    const terrain = new Terrain(units);
-    return terrain.fight(terrainType);
+    return Terrain(units, terrainType);
   }
 }
 
-export class Terrain {
-  constructor(public units: Unit[]) {
-  }
+// TODO: Multiple Enemies
+export const Terrain = (units: Unit[], terrainType: string): Unit[] => {
+  let heroNames = units[0].name;
+  let enemyNames = units[units.length - 1].name;
+  const heroes = units.filter(unit => unit.name === heroNames);
+  const enemies = units.filter(unit => unit.name === enemyNames);
 
-  fight(terrainType: string) {
-    let heroNames = this.units[0].name;
-    let enemyNames = this.units[this.units.length - 1].name;
-    const heroes = this.units.filter(unit => unit.name === heroNames);
-    const enemies = this.units.filter(unit => unit.name === enemyNames);
-
-    heroes.forEach(hero => {
-      enemies.forEach(enemy => {
-        if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
-          const battle = new Battle([hero, enemy]);
-          this.units = battle.doBattle(terrainType);
-        }
-      })
+  heroes.forEach(hero => {
+    enemies.forEach(enemy => {
+      if (hero?.health || 0 > 0 && enemy?.health || 0 > 0) {
+        const battle = new Battle([hero, enemy]);
+        units = battle.doBattle(terrainType);
+      }
     })
+  })
 
-    return this.units;
-  }
+  return units;
 }
 
 export class Battle {

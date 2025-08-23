@@ -165,9 +165,8 @@ describe('Terrain', () => {
     it('marine should kill zealot when only marine has vision of zealot due to wall', () => {
       let marine = new Marine();
       let zealot = new Zealot();
-      let terrain = new Terrain([marine, zealot]);
 
-      [marine, zealot] = terrain.fight('wall');
+      [marine, zealot] = Terrain([marine, zealot], 'wall');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeGreaterThan(0);
@@ -177,9 +176,8 @@ describe('Terrain', () => {
     it('marine should kill zergling when only marine has vision of zergling due to wall', () => {
       let marine = new Marine();
       let zergling = new Zergling();
-      let terrain = new Terrain([marine, zergling]);
 
-      [marine, zergling] = terrain.fight('wall');
+      [marine, zergling] = Terrain([marine, zergling], 'wall');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeGreaterThan(0);
@@ -191,9 +189,8 @@ describe('Terrain', () => {
     it('one marine should kill zealot when zealot is slowed due to hill then only one marine remaining', () => {
       let marineOne = new Marine();
       let zealot = new Zealot();
-      let terrain = new Terrain([marineOne, zealot]);
 
-      [marineOne, zealot] = terrain.fight('hill');
+      [marineOne, zealot] = Terrain([marineOne, zealot], 'hill');
 
       expect(marineOne.name).toEqual('marine');
       expect(marineOne.health).toBeLessThanOrEqual(0);
@@ -203,9 +200,8 @@ describe('Terrain', () => {
     it('marine should kill one zergling when one zergling is slowed due to hill then only one zergling remaining', () => {
       let marine = new Marine();
       let zergling = new Zergling();
-      let terrain = new Terrain([marine, zergling]);
 
-      [marine, zergling] = terrain.fight('hill');
+      [marine, zergling] = Terrain([marine, zergling], 'hill');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBe(2);
@@ -217,9 +213,8 @@ describe('Terrain', () => {
     it('one zealot should kill one marine', () => {
       let marine = new Marine();
       let zealot = new Zealot();
-      let terrain = new Terrain([marine, zealot]);
 
-      [marine, zealot] = terrain.fight('flatland');
+      [marine, zealot] = Terrain([marine, zealot], 'flatland');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeLessThanOrEqual(0);
@@ -229,9 +224,8 @@ describe('Terrain', () => {
     it('one marine should kill one zergling', () => {
       let marine = new Marine();
       let zergling = new Zergling();
-      let terrain = new Terrain([marine, zergling]);
 
-      [marine, zergling] = terrain.fight('flatland');
+      [marine, zergling] = Terrain([marine, zergling], 'flatland');
 
       expect(marine.name).toEqual('marine');
       expect(marine.health).toBeGreaterThan(0);
