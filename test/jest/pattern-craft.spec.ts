@@ -161,18 +161,35 @@ describe('Battle', () => {
 });
 
 describe('Terrain', () => {
-  describe('wall', () => {
-    it('marine should kill zealot when only marine has vision of zealot due to wall', () => {
-      let marine = new Marine();
-      let zealot = new Zealot();
+  [
+    { hero: new Marine(), enemy: new Zealot(), terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
+    { hero: new Marine(), enemy: new Zergling(), terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
+    { hero: new Zealot(), enemy: new Marine(), terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
+    { hero: new Zergling(), enemy: new Marine(), terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
+    { hero: new Zealot(), enemy: new Zergling(), terrainType: 'wall', heroHealth: 3, enemyHealth: 1 },
+    { hero: new Zergling(), enemy: new Zealot(), terrainType: 'wall', heroHealth: 1, enemyHealth: 3 },
+    { hero: new Marine(), enemy: new Zealot(), terrainType: 'hill', heroHealth: 0, enemyHealth: 1 },
+    { hero: new Marine(), enemy: new Zergling(), terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
+    { hero: new Zealot(), enemy: new Marine(), terrainType: 'hill', heroHealth: 1, enemyHealth: 0 },
+    { hero: new Zergling(), enemy: new Marine(), terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
+    { hero: new Zealot(), enemy: new Zergling(), terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
+    { hero: new Zergling(), enemy: new Zealot(), terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
+    { hero: new Marine(), enemy: new Zealot(), terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
+    { hero: new Marine(), enemy: new Zergling(), terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
+    { hero: new Zealot(), enemy: new Marine(), terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
+    { hero: new Zergling(), enemy: new Marine(), terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
+    { hero: new Zealot(), enemy: new Zergling(), terrainType: 'flatland', heroHealth: 2, enemyHealth: 0 },
+    { hero: new Zergling(), enemy: new Zealot(), terrainType: 'flatland', heroHealth: 0, enemyHealth: 2 },
+  ].forEach(({hero, enemy, terrainType, heroHealth, enemyHealth}) => {
+    it(`${hero.name} should battle ${enemy.name} with terrain modifier ${terrainType}`, () => {
 
-      [marine, zealot] = Terrain([marine, zealot], 'wall');
+      [hero, enemy] = Terrain([hero, enemy], terrainType);
 
-      expect(marine.name).toEqual('marine');
-      expect(marine.health).toBeGreaterThan(0);
-      expect(zealot.name).toEqual('zealot');
-      expect(zealot.health).toBeLessThanOrEqual(0);
+      expect(hero.health).toEqual(heroHealth);
+      expect(enemy.health).toEqual(enemyHealth);
     })
+  })
+  describe('wall', () => {
     it('marine should kill zergling when only marine has vision of zergling due to wall', () => {
       let marine = new Marine();
       let zergling = new Zergling();
