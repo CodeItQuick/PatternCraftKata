@@ -2,10 +2,6 @@
 import exp = require("node:constants");
 
 describe('Pattern Craft', () => {
-  // let theory = [
-  //   { something: 'something' }
-  // ]
-  // theory.forEach(x => {
   it(`marine should defeat zerg when one marine fight one zergling`, () => {
     const patternCraft = new PatternCraft();
     let marine = new Marine();
@@ -59,16 +55,14 @@ describe('Pattern Craft', () => {
     expect(units.enemies[0].name).toBe('zergling');
     expect(units.enemies[0].health).toBeLessThanOrEqual(0);
   })
-  // })
 })
 
 describe('Battle on flatland', () => {
   it('battle knows 1 marine beats 1 zergling', () => {
     let marine = new Marine();
     let zergling = new Zergling();
-    const battle = new Battle([marine, zergling]);
 
-    [marine, zergling] = battle.doBattle();
+    [marine, zergling] = Battle([marine, zergling]);
 
     expect(marine.name).toEqual('marine');
     expect(marine.health).toBeGreaterThan(0);
@@ -78,9 +72,8 @@ describe('Battle on flatland', () => {
   it('battle knows 1 marine beats 1 zealot', () => {
     let marine = new Marine();
     let zealot = new Zealot();
-    const battle = new Battle([marine, zealot]);
 
-    [marine, zealot] = battle.doBattle();
+    [marine, zealot] = Battle([marine, zealot]);
 
     expect(marine.name).toEqual('marine');
     expect(marine.health).toBeLessThanOrEqual(0);
@@ -90,9 +83,8 @@ describe('Battle on flatland', () => {
   it('battle knows 1 zealot beats 1 zergling', () => {
     let zealot = new Zealot();
     let zergling = new Zergling();
-    const battle = new Battle([zealot, zergling]);
 
-    [zealot, zergling] = battle.doBattle();
+    [zealot, zergling] = Battle([zealot, zergling]);
 
     expect(zealot.name).toEqual('zealot');
     expect(zealot.health).toBeGreaterThan(0);
@@ -112,9 +104,8 @@ describe('Battle', () => {
       {hero: new Zealot(), enemy: new Zergling(), heroHealth: 3, enemyHealth: 1},
     ].forEach(({enemy, hero, heroHealth, enemyHealth}) => {
       it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
-        const battle = new Battle([hero, enemy]);
 
-        [hero, enemy] = battle.doBattle('wall');
+        [hero, enemy] = Battle([hero, enemy], 'wall');
 
         expect(hero.health).toEqual(heroHealth);
         expect(enemy.health).toEqual(enemyHealth);
@@ -131,9 +122,8 @@ describe('Battle', () => {
       {hero: new Zealot(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0},
     ].forEach(({enemy, hero, heroHealth, enemyHealth}) => {
       it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
-        const battle = new Battle([hero, enemy]);
 
-        [hero, enemy] = battle.doBattle('hill');
+        [hero, enemy] = Battle([hero, enemy], 'hill');
 
         expect(hero.health).toEqual(heroHealth);
         expect(enemy.health).toEqual(enemyHealth);
@@ -150,9 +140,8 @@ describe('Battle', () => {
       {hero: new Zealot(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0},
     ].forEach(({enemy, hero, heroHealth, enemyHealth}) => {
       it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
-        const battle = new Battle([hero, enemy]);
 
-        [hero, enemy] = battle.doBattle('flatland');
+        [hero, enemy] = Battle([hero, enemy], 'flatland');
 
         expect(hero.health).toEqual(heroHealth);
         expect(enemy.health).toEqual(enemyHealth);
@@ -209,61 +198,55 @@ describe('Terrain', () => {
 
 describe('TerrainModifiers', () => {
   it('wall modifier determines damage between zergling and marine', () => {
-    const terrainModifier = new TerrainModifier('wall');
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const [heroModifier, enemyModifier] = terrainModifier.terrainModifiers([marine, zergling]);
+    const [heroModifier, enemyModifier] = TerrainModifier([marine, zergling], 'wall');
 
     expect(heroModifier).toEqual(-1)
     expect(enemyModifier).toEqual(3)
   })
   it('wall modifier determines damage between marine and zealot', () => {
-    const terrainModifier = new TerrainModifier('wall');
     let marine = new Marine();
     let zealot = new Zealot();
 
-    const [heroModifier, enemyModifier] = terrainModifier.terrainModifiers([marine, zealot]);
+    const [heroModifier, enemyModifier] = TerrainModifier([marine, zealot], 'wall');
 
     expect(heroModifier).toEqual(-1)
     expect(enemyModifier).toEqual(3)
   })
   it('wall modifier determines damage between zealot and zergling', () => {
-    const terrainModifier = new TerrainModifier('wall');
     let zealot = new Zealot();
     let zergling = new Zergling();
 
-    const [heroModifier, enemyModifier] = terrainModifier.terrainModifiers([zealot, zergling]);
+    const [heroModifier, enemyModifier] = TerrainModifier([zealot, zergling], 'wall');
 
     expect(heroModifier).toEqual(3)
     expect(enemyModifier).toEqual(3)
   })
   it('hill modifier determines damage between zergling and marine', () => {
-    const terrainModifier = new TerrainModifier('hill');
     let marine = new Marine();
     let zergling = new Zergling();
 
-    const [heroModifier, enemyModifier] = terrainModifier.terrainModifiers([marine, zergling]);
+    const [heroModifier, enemyModifier] = TerrainModifier([marine, zergling], 'hill');
 
     expect(heroModifier).toEqual(0)
     expect(enemyModifier).toEqual(1)
   })
   it('hill modifier determines damage between marine and zealot', () => {
-    const terrainModifier = new TerrainModifier('hill');
     let marine = new Marine();
     let zealot = new Zealot();
 
-    const [heroModifier, enemyModifier] = terrainModifier.terrainModifiers([marine, zealot]);
+    const [heroModifier, enemyModifier] = TerrainModifier([marine, zealot], 'hill');
 
     expect(heroModifier).toEqual(0)
     expect(enemyModifier).toEqual(0)
   })
   it('hill modifier determines damage between zealot and zergling', () => {
-    const terrainModifier = new TerrainModifier('hill');
     let zealot = new Zealot();
     let zergling = new Zergling();
 
-    const [heroModifier, enemyModifier] = terrainModifier.terrainModifiers([zealot, zergling]);
+    const [heroModifier, enemyModifier] = TerrainModifier([zealot, zergling], 'hill');
 
     expect(heroModifier).toEqual(0)
     expect(enemyModifier).toEqual(0)

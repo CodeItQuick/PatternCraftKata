@@ -6,15 +6,14 @@ export class PatternCraft {
   }
 }
 
-// TODO: Multiple Enemies
+// TODO: Multiple Micromanaged Enemies
 export const Terrain = (heroes: Unit[], enemies: Unit[], terrainType: string):
   { heroes: Unit[], enemies: Unit[] } => {
   let heroResults: Unit[] = [], enemyResults: Unit[] = [];
   heroes.forEach(hero => {
     enemies.forEach(enemy => {
       if (hero.health > 0 && enemy.health > 0) {
-        const battle = new Battle([hero, enemy]);
-        const [heroResult, enemyResult] = battle.doBattle(terrainType);
+        const [heroResult, enemyResult] = Battle([hero, enemy], terrainType);
         heroResults.push(heroResult);
         enemyResults.push(enemyResult);
       } else if (hero.health > 0) {
@@ -27,13 +26,7 @@ export const Terrain = (heroes: Unit[], enemies: Unit[], terrainType: string):
   return { enemies: enemyResults, heroes: heroResults };
 }
 
-export class Battle {
-  constructor(public units: [Unit, Unit]) {
-  }
-
-  doBattle(terrainModifier: string = 'flatland') {
-    const hero = this.units[0];
-    const enemy = this.units[1];
+export const Battle = ([hero, enemy]: [Unit, Unit], terrainModifier: string = 'flatland'): [Unit, Unit] => {
     if (hero === undefined) {
       throw new Error(`should never happen, the hero is undefined`);
     }
@@ -41,26 +34,16 @@ export class Battle {
       throw new Error('should never happen, the enemy is undefined');
     }
 
-    const modifier = new TerrainModifier(terrainModifier);
-    const [heroTerrainModifier, enemyTerrainModifier] = modifier.terrainModifiers([hero, enemy]);
+    const [heroTerrainModifier, enemyTerrainModifier] = TerrainModifier([hero, enemy], terrainModifier);
 
     return [hero.takeDamage(enemy, enemyTerrainModifier),
       enemy.takeDamage(hero, heroTerrainModifier)];
-  }
 }
 
-export class TerrainModifier {
-  public modifier: string;
-
-  constructor(modifier: string) {
-    this.modifier = modifier;
-
-  }
-
-  terrainModifiers([hero, enemy]: [Unit, Unit]): [number, number] {
+export const TerrainModifier = ([hero, enemy]: [Unit, Unit], modifier: string): [number, number] => {
     let heroTerrainModifier = 0;
     let enemyTerrainModifier = 0;
-    if (this.modifier === 'wall') {
+    if (modifier === 'wall') {
       if (enemy.name === 'zergling' || enemy.name === 'zealot') {
         enemyTerrainModifier = 3;
       } else {
@@ -72,7 +55,7 @@ export class TerrainModifier {
         heroTerrainModifier = -1;
       }
     }
-    if (this.modifier === 'hill') {
+    if (modifier === 'hill') {
       if (hero.name === 'marine' && enemy.name === 'zergling') {
         enemyTerrainModifier = 1;
       } else if (hero.name === 'zergling' && enemy.name === 'marine') {
@@ -81,7 +64,6 @@ export class TerrainModifier {
     }
 
     return [heroTerrainModifier, enemyTerrainModifier]
-  }
 }
 
 export class Unit {
