@@ -45,9 +45,10 @@ export class Battle {
     }
 
     const modifier = new TerrainModifier(terrainModifier);
-    modifier.determineDamage([hero, enemy]);
+    const [heroTerrainModifier, enemyTerrainModifier] = modifier.terrainModifiers([hero, enemy]);
 
-    return this.units;
+    return [hero.takeDamage(enemy, enemyTerrainModifier),
+      enemy.takeDamage(hero, heroTerrainModifier)];
   }
 }
 
@@ -59,56 +60,48 @@ export class TerrainModifier {
 
   }
 
-  determineDamage([hero, enemy]: [Unit, Unit]): [Unit, Unit] {
-    if (hero.health === undefined) {
-      return [hero, enemy]
-    }
-    if (enemy.health === undefined) {
-      return [hero, enemy]
-    }
+  terrainModifiers([hero, enemy]: [Unit, Unit]): [number, number] {
+    let heroTerrainModifier = 0;
+    let enemyTerrainModifier = 0;
     if (this.modifier === 'wall') {
-      let heroDamage = enemy.health;
-      let enemyDamage = hero.health;
       if (enemy.name === 'zergling' || enemy.name === 'zealot') {
-        enemyDamage = 0;
+        enemyTerrainModifier = 3;
+      } else {
+        enemyTerrainModifier = -1;
       }
       if (hero.name === 'zergling' || hero.name === 'zealot') {
-        heroDamage = 0;
+        heroTerrainModifier = 3;
+      } else {
+        heroTerrainModifier = -1;
       }
-      hero.health = hero?.health - enemyDamage;
-      enemy.health = enemy.health - heroDamage;
-
-      return [hero, enemy]
     }
     if (this.modifier === 'hill') {
-      let heroDamage = hero.damage;
-      let enemyDamage = enemy.damage;
       if (hero.name === 'marine' && enemy.name === 'zergling') {
-        enemyDamage = enemyDamage - 1;
+        enemyTerrainModifier = 1;
       } else if (hero.name === 'zergling' && enemy.name === 'marine') {
-        heroDamage = heroDamage - 1;
+        heroTerrainModifier = 1;
       }
-      hero.health = hero?.health - enemyDamage;
-      enemy.health = enemy.health - heroDamage;
+    }
 
-      return [hero, enemy]
-    }
-    if (this.modifier === 'flatland') {
-      hero.health = hero?.health - enemy.damage;
-      enemy.health = enemy.health - hero.damage;
-    }
-    return [hero, enemy]
+    return [heroTerrainModifier, enemyTerrainModifier]
   }
 }
 
 export class Unit {
-  health: number | undefined;
+  health: number = 0;
   name: string | undefined;
   damage: number = 0;
 
-  attack(unit: Unit) {
-    unit.health = 0;
-    return [this, unit] as Unit[];
+  takeDamage(enemy: Unit, terrainModifier: number) {
+    let enemyDamage = enemy.damage - terrainModifier
+    if (enemyDamage <= 0) {
+      enemyDamage = 0;
+    }
+    this.health = this.health - enemyDamage;
+    if (this.health < 0) {
+      this.health = 0;
+    }
+    return this;
   }
 }
 
