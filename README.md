@@ -32,7 +32,7 @@ Time:        0.858 s, estimated 1 s
 
 ----------|------------------|----------|-----------|------------|----------|----------|
           | % Mutation score |          |           |            |          |          |
-File      |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+File      |  total | covered | # k illed | # timeout | # survived | # no cov | # errors |
 ----------|--------|---------|----------|-----------|------------|----------|----------|
 All files |  87.22 |   87.22 |      113 |         3 |         17 |        0 |        0 |
 index.ts |  87.27 |   87.27 |       94 |         2 |         14 |        0 |        0 |

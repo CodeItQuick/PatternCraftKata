@@ -72,3 +72,23 @@ export const TerrainModifier =
     return [heroTerrainModifier, enemyTerrainModifier]
 }
 
+export const Turn = (hero: Unit, enemy: Unit, terrain: string) => {
+  if (enemy.canAttack) {
+    hero.health = hero.health - 1;
+  }
+  if (hero.canAttack) {
+    enemy.health = enemy.health - 1;
+  }
+  if (hero.health > 0 && enemy.health > 0) {
+    hero.canAttack = true;
+    enemy.canAttack = true
+  } else {
+    if (hero.name !== 'marine') {
+      hero.canAttack = false;
+    }
+    if (enemy.name !== 'marine') {
+      enemy.canAttack = false;
+    }
+  }
+  return [hero, enemy]
+}

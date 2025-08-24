@@ -2,6 +2,7 @@
   health: number = 0;
   name: string | undefined;
   damage: number = 0;
+  canAttack: boolean = false;
 
   takeDamage(enemy: Unit, terrainModifier: number) {
     let enemyDamage = enemy.damage - terrainModifier
@@ -30,6 +31,7 @@ export class Marine extends Unit {
     super();
     this.health = 2;
     this.damage = 2;
+    this.canAttack = true;
     this.name = 'marine'
   }
 }

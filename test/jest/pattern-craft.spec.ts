@@ -1,4 +1,4 @@
-﻿import {Battle, PatternCraft, War, TerrainModifier} from "../../src";
+﻿import {Battle, PatternCraft, War, TerrainModifier, Turn} from "../../src";
 import exp = require("node:constants");
 import {Marine, Zealot, Zergling} from "../../src/units";
 
@@ -247,5 +247,48 @@ describe('TerrainModifiers', () => {
 
     expect(heroModifier).toEqual(0)
     expect(enemyModifier).toEqual(0)
+  })
+})
+
+describe('Turn', () => {
+  it('captures damage between zerglings and zealots', () => {
+    const zergling = new Zergling();
+    const zealot = new Zealot();
+    const [zerglingTurnOne, zealotTurnOne] = Turn(zergling, zealot, 'flatland');
+    expect(zerglingTurnOne.health).toEqual(1);
+    expect(zealotTurnOne.health).toEqual(3);
+
+    const [zerglingTurnTwo, zealotTurnTwo] = Turn(zergling, zealot, 'flatland');
+
+    expect(zerglingTurnTwo.health).toEqual(0);
+    expect(zealotTurnTwo.health).toEqual(2);
+    expect(zerglingTurnTwo.canAttack).toBe(false);
+    expect(zealotTurnTwo.canAttack).toBe(false);
+  })
+  it('captures damage between marines and zealots', () => {
+    const marine = new Marine();
+    const zealot = new Zealot();
+
+    const [marineResult, zealotResult] = Turn(marine, zealot, 'flatland');
+
+    expect(marineResult.health).toEqual(2);
+    expect(zealotResult.health).toEqual(2);
+  })
+  it('captures damage between marines and zealots after 3 turns', () => {
+    const marine = new Marine();
+    const zealot = new Zealot();
+    const [marineTurnOne, zealotTurnOne] = Turn(marine, zealot, 'flatland');
+
+    const [marineTurnTwo, zealotTurnTwo] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
+
+    expect(marineTurnTwo.health).toEqual(1);
+    expect(zealotTurnTwo.health).toEqual(1);
+
+    const [marineTurnThree, zealotTurnThree] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
+
+    expect(marineTurnThree.health).toEqual(0);
+    expect(zealotTurnThree.health).toEqual(0);
+    expect(marineTurnThree.canAttack).toEqual(true);
+    expect(zealotTurnThree.canAttack).toEqual(false);
   })
 })
