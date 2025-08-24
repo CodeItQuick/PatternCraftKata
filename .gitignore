@@ -10,3 +10,6 @@ yarn-error.log*
 
 .vscode/*
 coverage
+
+.stryker-tmp
+.nyc_output

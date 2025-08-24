@@ -6,12 +6,15 @@
     "precompile": "rimraf src/**/*.js test/**/*.js",
     "compile": "tsc",
     "pretest": "rimraf src/**/*.js test/**/*.js",
-    "test:jest": "jest",
-    "test:jest:watch": "jest --watchAll"
+    "test": "jest",
+    "test:jest:watch": "jest --watchAll",
+    "test:coverage": "nyc --reporter=text jest ",
+    "test:stryker": "stryker run"
   },
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@stryker-mutator/jest-runner": "^9.0.1",
     "@types/chai": "^4.2.22",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.7",
