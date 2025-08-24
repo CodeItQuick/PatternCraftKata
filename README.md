@@ -16,19 +16,17 @@ from: https://www.codewars.com/collections/patterncraft
 
 ## Test Coverage
 
-
-| File                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |  
----------------------|---------|----------|---------|---------|-------------------|  
-| All files           | 100     | 84.84    | 100     | 100     |                   |   
-| src                 | 100     | 78.04    | 100     | 100     |                   |  
-| index.js            | 100     | 78.04    | 100     | 100     | 22-28,47-61,72-84 |  
-| src/units           | 100     | 100      | 100     | 100     |                   |  
-| marine.js           | 100     | 100      | 100     | 100     |                   |  
-| zealot.js           | 100     | 100      | 100     | 100     |                   |  
-| zergling.js         | 100     | 100      | 100     | 100     |                   |  
-| test                | 100     | 85.71    | 100     | 100     |                   |  
-| index_units.spec.js | 100     | 85.71    | 100     | 100     | 3                 |  
-| test_units.spec.js  | 100     | 100      | 100     | 100     |                   |  
+----------|---------|----------|---------|---------|-------------------                                                                                                                                                          
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                                                                                           
+----------|---------|----------|---------|---------|-------------------
+All files |   88.88 |    79.41 |   81.81 |   88.88 |                  
+index.ts |   94.52 |     91.3 |     100 |   94.52 | 46-48,50         
+units.ts |   79.54 |    54.54 |   66.66 |   79.54 | 8-9,11-12,24-28  
+----------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       58 passed, 58 total
+Snapshots:   0 total
+Time:        0.858 s, estimated 1 s
 
 ## Mutation Test Coverage
 
