@@ -1,5 +1,6 @@
-﻿import {Battle, Marine, PatternCraft, Terrain, TerrainModifier, Zealot, Zergling} from "../../src";
+﻿import {Battle, PatternCraft, War, TerrainModifier} from "../../src";
 import exp = require("node:constants");
+import {Marine, Zealot, Zergling} from "../../src/units";
 
 describe('Pattern Craft', () => {
   it(`marine should defeat zerg when one marine fight one zergling`, () => {
@@ -143,7 +144,7 @@ describe('Battle', () => {
   })
 });
 
-describe('Terrain', () => {
+describe('War', () => {
   [
     { hero: [new Marine()], enemy: [new Zealot()], terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
     { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
@@ -166,7 +167,7 @@ describe('Terrain', () => {
   ].forEach(({hero, enemy, terrainType, heroHealth, enemyHealth}) => {
     it(`${hero[0].name} should battle ${enemy[0].name} with terrain modifier ${terrainType}`, () => {
 
-      const { heroes, enemies } = Terrain(hero, enemy, terrainType);
+      const { heroes, enemies } = War(hero, enemy, terrainType);
 
       expect(heroes[0].health).toEqual(heroHealth);
       expect(enemies[0].health).toEqual(enemyHealth);
@@ -184,7 +185,7 @@ describe('Terrain', () => {
   ].forEach(({heroes, enemies, terrainType, heroHealth, enemyHealth}) => {
     it(`${heroes.length} number of heroes should battle ${enemies.length} with terrain modifier ${terrainType}`, () => {
 
-      const { heroes: heroResult, enemies: enemyResult } = Terrain(heroes, enemies, terrainType);
+      const { heroes: heroResult, enemies: enemyResult } = War(heroes, enemies, terrainType);
 
       heroHealth.forEach((hero, idx) => expect(heroResult[idx].health).toEqual(hero))
       enemyHealth.forEach((enemy, idx) => expect(enemyResult[idx].health).toEqual(enemy))
