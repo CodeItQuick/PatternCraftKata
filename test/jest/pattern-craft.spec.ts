@@ -178,13 +178,16 @@ describe('Terrain', () => {
     { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'hill', heroHealth: [2], enemyHealth: [0, 0] },
     { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0] },
     { heroes: [new Marine()], enemies: [new Zergling(), new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0, 1] },
+    { heroes: [new Zealot()], enemies: [new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [1], enemyHealth: [0, 0] },
+    { heroes: [new Zealot()], enemies: [new Zergling(), new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0, 0] },
+    { heroes: [new Marine(), new Marine()], enemies: [new Zealot(), new Zealot()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 3] },
   ].forEach(({heroes, enemies, terrainType, heroHealth, enemyHealth}) => {
     it(`${heroes.length} number of heroes should battle ${enemies.length} with terrain modifier ${terrainType}`, () => {
 
       const { heroes: heroResult, enemies: enemyResult } = Terrain(heroes, enemies, terrainType);
 
-      heroHealth.forEach((hero, idx) => expect(heroes[idx].health).toEqual(hero))
-      enemyHealth.forEach((enemy, idx) => expect(enemies[idx].health).toEqual(enemy))
+      heroHealth.forEach((hero, idx) => expect(heroResult[idx].health).toEqual(hero))
+      enemyHealth.forEach((enemy, idx) => expect(enemyResult[idx].health).toEqual(enemy))
     })
   })
 })

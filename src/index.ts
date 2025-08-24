@@ -1,6 +1,5 @@
-
-
-export const PatternCraft = (units: Unit[], terrainType: string = 'flatland') => {
+export const PatternCraft =
+  (units: Unit[], terrainType: string = 'flatland') => {
   const heroRace = units[0].name
   const enemyRace = units[units.length - 1].name
   const heroes = units.filter(unit => unit.name === heroRace)
@@ -9,8 +8,8 @@ export const PatternCraft = (units: Unit[], terrainType: string = 'flatland') =>
   return Terrain(heroes, enemies, terrainType);
 }
 
-// TODO: Multiple Micromanaged Enemies
-export const Terrain = (heroes: Unit[], enemies: Unit[], terrainType: string):
+export const Terrain =
+  (heroes: Unit[], enemies: Unit[], terrainType: string):
   { heroes: Unit[], enemies: Unit[] } => {
   let heroResults: Unit[] = [], enemyResults: Unit[] = [];
   heroes.forEach(hero => {
@@ -29,7 +28,8 @@ export const Terrain = (heroes: Unit[], enemies: Unit[], terrainType: string):
   return { enemies: enemyResults, heroes: heroResults };
 }
 
-export const Battle = ([hero, enemy]: [Unit, Unit], terrainModifier: string = 'flatland'): [Unit, Unit] => {
+export const Battle =
+  ([hero, enemy]: [Unit, Unit], terrainModifier: string = 'flatland'): [Unit, Unit] => {
     if (hero === undefined) {
       throw new Error(`should never happen, the hero is undefined`);
     }
@@ -43,7 +43,8 @@ export const Battle = ([hero, enemy]: [Unit, Unit], terrainModifier: string = 'f
       enemy.takeDamage(hero, heroTerrainModifier)];
 }
 
-export const TerrainModifier = ([hero, enemy]: [Unit, Unit], modifier: string): [number, number] => {
+export const TerrainModifier =
+  ([hero, enemy]: [Unit, Unit], modifier: string): [number, number] => {
     let heroTerrainModifier = 0;
     let enemyTerrainModifier = 0;
     if (modifier === 'wall') {
