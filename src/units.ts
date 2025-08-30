@@ -41,7 +41,7 @@ export class Marine extends Unit {
 export class Zergling extends Unit {
   constructor() {
     super();
-    this.health = 1;
+    this.health = 2;
     this.damage = 1;
     this.name = 'zergling'
   }
