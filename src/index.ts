@@ -72,13 +72,13 @@ export const TerrainModifier =
     return [heroTerrainModifier, enemyTerrainModifier]
 }
 
-export const Turn = (hero: Unit, enemy: Unit, terrain: string) => {
+export const Turn = (hero: Unit, enemy: Unit, [heroTerrain, enemyTerrain]: [number, number]) => {
   // if allowed, enemy and hero do damage to each other
   if (enemy.canAttack) {
-    hero.health = hero.health - 1;
+    hero.takeTurnDamage(heroTerrain);
   }
   if (hero.canAttack) {
-    enemy.health = enemy.health - 1;
+    enemy.takeTurnDamage(enemyTerrain);
   }
   // if hero and enemy are alive, they can now attack each other
   if (hero.health > 0 && enemy.health > 0) {

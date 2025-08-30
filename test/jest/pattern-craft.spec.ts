@@ -254,15 +254,15 @@ describe('Turn', () => {
   it('captures damage between zerglings and zealots', () => {
     const zergling = new Zergling();
     const zealot = new Zealot();
-    const [zerglingTurnOne, zealotTurnOne] = Turn(zergling, zealot, 'flatland');
+    const [zerglingTurnOne, zealotTurnOne] = Turn(zergling, zealot, TerrainModifier([zergling, zealot], 'flatland'));
     expect(zerglingTurnOne.health).toEqual(2);
     expect(zealotTurnOne.health).toEqual(4);
 
-    const [zerglingTurnTwo, zealotTurnTwo] = Turn(zergling, zealot, 'flatland');
+    const [zerglingTurnTwo, zealotTurnTwo] = Turn(zergling, zealot, TerrainModifier([zergling, zealot], 'flatland'));
 
     expect(zerglingTurnTwo.health).toEqual(1);
     expect(zealotTurnTwo.health).toEqual(3);
-    const [zerglingTurnThree, zealotTurnThree] = Turn(zerglingTurnTwo, zealotTurnTwo, 'flatland');
+    const [zerglingTurnThree, zealotTurnThree] = Turn(zerglingTurnTwo, zealotTurnTwo, TerrainModifier([zergling, zealot], 'flatland'));
     expect(zerglingTurnThree.canAttack).toBe(false);
     expect(zealotTurnThree.canAttack).toBe(false);
   })
@@ -270,7 +270,7 @@ describe('Turn', () => {
     const marine = new Marine();
     const zealot = new Zealot();
 
-    const [marineResult, zealotResult] = Turn(marine, zealot, 'flatland');
+    const [marineResult, zealotResult] = Turn(marine, zealot, TerrainModifier([marine, zealot], 'flatland'));
 
     expect(marineResult.health).toEqual(2);
     expect(zealotResult.health).toEqual(3);
@@ -278,12 +278,12 @@ describe('Turn', () => {
   it('captures damage between marines and zealots after 3 turns', () => {
     const marine = new Marine();
     const zealot = new Zealot();
-    const [marineTurnOne, zealotTurnOne] = Turn(marine, zealot, 'flatland');
-    const [marineTurnTwo, zealotTurnTwo] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
+    const [marineTurnOne, zealotTurnOne] = Turn(marine, zealot, TerrainModifier([marine, zealot], 'flatland'));
+    const [marineTurnTwo, zealotTurnTwo] = Turn(marineTurnOne, zealotTurnOne, TerrainModifier([marine, zealot], 'flatland'));
     expect(marineTurnTwo.health).toEqual(1);
     expect(zealotTurnTwo.health).toEqual(2);
 
-    const [marineTurnThree, zealotTurnThree] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
+    const [marineTurnThree, zealotTurnThree] = Turn(marineTurnOne, zealotTurnOne, TerrainModifier([marine, zealot], 'flatland'));
 
     expect(marineTurnThree.health).toEqual(0);
     expect(zealotTurnThree.health).toEqual(1);
@@ -294,19 +294,19 @@ describe('Turn', () => {
     const marine = new Marine();
     const zerglingOne = new Zergling();
     const zerglingTwo = new Zergling();
-    const [marineTurnOne, zerglingTurnOne] = Turn(marine, zerglingOne, 'flatland');
-    const [marineTurnTwo, zerglingTurnTwo] = Turn(marineTurnOne, zerglingTurnOne, 'flatland');
+    const [marineTurnOne, zerglingTurnOne] = Turn(marine, zerglingOne, TerrainModifier([marine, zerglingOne], 'flatland'));
+    const [marineTurnTwo, zerglingTurnTwo] = Turn(marineTurnOne, zerglingTurnOne, TerrainModifier([marine, zerglingOne], 'flatland'));
     expect(marineTurnTwo.health).toEqual(1);
     expect(zerglingTurnTwo.health).toEqual(0);
     expect(marineTurnTwo.canAttack).toEqual(true);
     expect(zerglingTurnTwo.canAttack).toEqual(false);
 
-    const [marineTurnThree, zealotTwoTurnThree] = Turn(marineTurnTwo, zerglingTwo, 'flatland');
+    const [marineTurnThree, zealotTwoTurnThree] = Turn(marineTurnTwo, zerglingTwo, TerrainModifier([marine, zerglingOne], 'flatland'));
 
     expect(marineTurnThree.health).toEqual(1);
     expect(zealotTwoTurnThree.health).toEqual(1);
 
-    const [marineTurnFour, zealotTurnFour] = Turn(marineTurnThree, zealotTwoTurnThree, 'flatland');
+    const [marineTurnFour, zealotTurnFour] = Turn(marineTurnThree, zealotTwoTurnThree, TerrainModifier([marine, zerglingOne], 'flatland'));
 
     expect(marineTurnFour.health).toEqual(0);
     expect(zealotTurnFour.health).toEqual(0);

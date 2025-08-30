@@ -16,6 +16,17 @@
     }
     return this;
   }
+  takeTurnDamage(terrainModifier: number) {
+    let enemyDamage = 1 - terrainModifier
+    if (enemyDamage <= 0) {
+      enemyDamage = 0;
+    }
+    this.health = this.health - enemyDamage;
+    if (this.health < 0 || this.health === undefined) {
+      this.health = 0;
+    }
+    return this;
+  }
 }
 
 export class Zealot extends Unit {
