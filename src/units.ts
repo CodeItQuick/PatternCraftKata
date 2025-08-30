@@ -3,6 +3,7 @@
   name: string | undefined;
   damage: number = 0;
   canAttack: boolean = false;
+  attackType: 'melee' | 'range' = 'melee';
 
   takeDamage(enemy: Unit, terrainModifier: number) {
     let enemyDamage = enemy.damage - terrainModifier
@@ -20,8 +21,8 @@
 export class Zealot extends Unit {
   constructor() {
     super();
-    this.health = 3;
-    this.damage = 2;
+    this.health = 4;
+    this.damage = 3;
     this.name = 'zealot';
   }
 }
@@ -30,9 +31,10 @@ export class Marine extends Unit {
   constructor() {
     super();
     this.health = 2;
-    this.damage = 2;
+    this.damage = 3;
     this.canAttack = true;
-    this.name = 'marine'
+    this.name = 'marine';
+    this.attackType = 'range';
   }
 }
 

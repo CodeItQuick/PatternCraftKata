@@ -52,12 +52,12 @@ export const TerrainModifier =
     if (modifier === 'wall') {
       if (enemy.name === 'zergling' || enemy.name === 'zealot') {
         enemyTerrainModifier = 3;
-      } else {
+      } else if (enemy.name === 'marine') {
         enemyTerrainModifier = -1;
       }
       if (hero.name === 'zergling' || hero.name === 'zealot') {
         heroTerrainModifier = 3;
-      } else {
+      } else if (hero.name === 'marine') {
         heroTerrainModifier = -1;
       }
     }
@@ -73,20 +73,23 @@ export const TerrainModifier =
 }
 
 export const Turn = (hero: Unit, enemy: Unit, terrain: string) => {
+  // if allowed, enemy and hero do damage to each other
   if (enemy.canAttack) {
     hero.health = hero.health - 1;
   }
   if (hero.canAttack) {
     enemy.health = enemy.health - 1;
   }
+  // if hero and enemy are alive, they can now attack each other
   if (hero.health > 0 && enemy.health > 0) {
     hero.canAttack = true;
     enemy.canAttack = true
   } else {
-    if (hero.name !== 'marine') {
+    // otherwise, one of them is dead and reset melee's attack modifier
+    if (hero.attackType === 'melee') {
       hero.canAttack = false;
     }
-    if (enemy.name !== 'marine') {
+    if (enemy.attackType === 'melee') {
       enemy.canAttack = false;
     }
   }

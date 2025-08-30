@@ -88,16 +88,16 @@ describe('Battle on flatland', () => {
 })
 
 describe('Battle', () => {
-  describe('battle through wall', () => {
+  describe('on terrain wall', () => {
     [
       {hero: new Marine(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0},
       {hero: new Marine(), enemy: new Zealot(), heroHealth: 2, enemyHealth: 0},
       {hero: new Zergling(), enemy: new Marine(), heroHealth: 0, enemyHealth: 2},
       {hero: new Zealot(), enemy: new Marine(), heroHealth: 0, enemyHealth: 2},
-      {hero: new Zergling(), enemy: new Zealot(), heroHealth: 1, enemyHealth: 3},
-      {hero: new Zealot(), enemy: new Zergling(), heroHealth: 3, enemyHealth: 1},
+      {hero: new Zergling(), enemy: new Zealot(), heroHealth: 1, enemyHealth: 4},
+      {hero: new Zealot(), enemy: new Zergling(), heroHealth: 4, enemyHealth: 1},
     ].forEach(({enemy, hero, heroHealth, enemyHealth}) => {
-      it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
+      it(`given ${hero.name} fights ${enemy.name} then hero health is ${heroHealth} and enemy is ${enemyHealth}`, () => {
 
         [hero, enemy] = Battle([hero, enemy], 'wall');
 
@@ -106,16 +106,16 @@ describe('Battle', () => {
       })
     })
   });
-  describe('Battle through hill', () => {
+  describe('on terrain hill', () => {
     [
       {hero: new Marine(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0},
       {hero: new Marine(), enemy: new Zealot(), heroHealth: 0, enemyHealth: 1},
       {hero: new Zergling(), enemy: new Marine(), heroHealth: 0, enemyHealth: 2},
       {hero: new Zealot(), enemy: new Marine(), heroHealth: 1, enemyHealth: 0},
-      {hero: new Zergling(), enemy: new Zealot(), heroHealth: 0, enemyHealth: 2},
-      {hero: new Zealot(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0},
+      {hero: new Zergling(), enemy: new Zealot(), heroHealth: 0, enemyHealth: 3},
+      {hero: new Zealot(), enemy: new Zergling(), heroHealth: 3, enemyHealth: 0},
     ].forEach(({enemy, hero, heroHealth, enemyHealth}) => {
-      it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
+      it(`given ${hero.name} fights ${enemy.name} then hero health is ${heroHealth} and enemy is ${enemyHealth}`, () => {
 
         [hero, enemy] = Battle([hero, enemy], 'hill');
 
@@ -130,8 +130,8 @@ describe('Battle', () => {
       {hero: new Marine(), enemy: new Zealot(), heroHealth: 0, enemyHealth: 1},
       {hero: new Zergling(), enemy: new Marine(), heroHealth: 0, enemyHealth: 1},
       {hero: new Zealot(), enemy: new Marine(), heroHealth: 1, enemyHealth: 0},
-      {hero: new Zergling(), enemy: new Zealot(), heroHealth: 0, enemyHealth: 2},
-      {hero: new Zealot(), enemy: new Zergling(), heroHealth: 2, enemyHealth: 0},
+      {hero: new Zergling(), enemy: new Zealot(), heroHealth: 0, enemyHealth: 3},
+      {hero: new Zealot(), enemy: new Zergling(), heroHealth: 3, enemyHealth: 0},
     ].forEach(({enemy, hero, heroHealth, enemyHealth}) => {
       it(`battle knows 1 ${hero.name} fights 1 ${enemy.name}`, () => {
 
@@ -150,22 +150,22 @@ describe('War', () => {
     { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'wall', heroHealth: 2, enemyHealth: 0 },
     { hero: [new Zealot()], enemy: [new Marine()], terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
     { hero: [new Zergling()], enemy: [new Marine()], terrainType: 'wall', heroHealth: 0, enemyHealth: 2 },
-    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'wall', heroHealth: 3, enemyHealth: 1 },
-    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'wall', heroHealth: 1, enemyHealth: 3 },
+    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'wall', heroHealth: 4, enemyHealth: 1 },
+    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'wall', heroHealth: 1, enemyHealth: 4 },
     { hero: [new Marine()], enemy: [new Zealot()], terrainType: 'hill', heroHealth: 0, enemyHealth: 1 },
     { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
     { hero: [new Zealot()], enemy: [new Marine()], terrainType: 'hill', heroHealth: 1, enemyHealth: 0 },
     { hero: [new Zergling()], enemy: [new Marine()], terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
-    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'hill', heroHealth: 2, enemyHealth: 0 },
-    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'hill', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'hill', heroHealth: 3, enemyHealth: 0 },
+    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'hill', heroHealth: 0, enemyHealth: 3 },
     { hero: [new Marine()], enemy: [new Zealot()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
     { hero: [new Marine()], enemy: [new Zergling()], terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
     { hero: [new Zealot()], enemy: [new Marine()], terrainType: 'flatland', heroHealth: 1, enemyHealth: 0 },
     { hero: [new Zergling()], enemy: [new Marine()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 1 },
-    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'flatland', heroHealth: 2, enemyHealth: 0 },
-    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 2 },
+    { hero: [new Zealot()], enemy: [new Zergling()], terrainType: 'flatland', heroHealth: 3, enemyHealth: 0 },
+    { hero: [new Zergling()], enemy: [new Zealot()], terrainType: 'flatland', heroHealth: 0, enemyHealth: 3 },
   ].forEach(({hero, enemy, terrainType, heroHealth, enemyHealth}) => {
-    it(`${hero[0].name} should battle ${enemy[0].name} with terrain modifier ${terrainType}`, () => {
+    it(`given ${hero[0].name} battles ${enemy[0].name} with terrain modifier ${terrainType} then hero health is ${heroHealth} and enemy health is ${enemyHealth}`, () => {
 
       const { heroes, enemies } = War(hero, enemy, terrainType);
 
@@ -179,9 +179,9 @@ describe('War', () => {
     { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'hill', heroHealth: [2], enemyHealth: [0, 0] },
     { heroes: [new Marine()], enemies: [new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0] },
     { heroes: [new Marine()], enemies: [new Zergling(), new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0, 1] },
-    { heroes: [new Zealot()], enemies: [new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [1], enemyHealth: [0, 0] },
-    { heroes: [new Zealot()], enemies: [new Zergling(), new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 0, 0] },
-    { heroes: [new Marine(), new Marine()], enemies: [new Zealot(), new Zealot()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 3] },
+    { heroes: [new Zealot()], enemies: [new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [2], enemyHealth: [0, 0] },
+    { heroes: [new Zealot()], enemies: [new Zergling(), new Zergling(), new Zergling()], terrainType: 'flatland', heroHealth: [1], enemyHealth: [0, 0, 0] },
+    { heroes: [new Marine(), new Marine()], enemies: [new Zealot(), new Zealot()], terrainType: 'flatland', heroHealth: [0], enemyHealth: [0, 4] },
   ].forEach(({heroes, enemies, terrainType, heroHealth, enemyHealth}) => {
     it(`${heroes.length} number of heroes should battle ${enemies.length} with terrain modifier ${terrainType}`, () => {
 
@@ -256,12 +256,12 @@ describe('Turn', () => {
     const zealot = new Zealot();
     const [zerglingTurnOne, zealotTurnOne] = Turn(zergling, zealot, 'flatland');
     expect(zerglingTurnOne.health).toEqual(1);
-    expect(zealotTurnOne.health).toEqual(3);
+    expect(zealotTurnOne.health).toEqual(4);
 
     const [zerglingTurnTwo, zealotTurnTwo] = Turn(zergling, zealot, 'flatland');
 
     expect(zerglingTurnTwo.health).toEqual(0);
-    expect(zealotTurnTwo.health).toEqual(2);
+    expect(zealotTurnTwo.health).toEqual(3);
     expect(zerglingTurnTwo.canAttack).toBe(false);
     expect(zealotTurnTwo.canAttack).toBe(false);
   })
@@ -272,23 +272,36 @@ describe('Turn', () => {
     const [marineResult, zealotResult] = Turn(marine, zealot, 'flatland');
 
     expect(marineResult.health).toEqual(2);
-    expect(zealotResult.health).toEqual(2);
+    expect(zealotResult.health).toEqual(3);
   })
   it('captures damage between marines and zealots after 3 turns', () => {
     const marine = new Marine();
     const zealot = new Zealot();
     const [marineTurnOne, zealotTurnOne] = Turn(marine, zealot, 'flatland');
-
     const [marineTurnTwo, zealotTurnTwo] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
-
     expect(marineTurnTwo.health).toEqual(1);
-    expect(zealotTurnTwo.health).toEqual(1);
+    expect(zealotTurnTwo.health).toEqual(2);
 
     const [marineTurnThree, zealotTurnThree] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
 
     expect(marineTurnThree.health).toEqual(0);
-    expect(zealotTurnThree.health).toEqual(0);
+    expect(zealotTurnThree.health).toEqual(1);
     expect(marineTurnThree.canAttack).toEqual(true);
     expect(zealotTurnThree.canAttack).toEqual(false);
   })
+  // it('captures damage between marine and 2 zerglings after 3 turns', () => {
+  //   const marine = new Marine();
+  //   const zealot = new Zealot();
+  //   const [marineTurnOne, zealotTurnOne] = Turn(marine, zealot, 'flatland');
+  //   const [marineTurnTwo, zealotTurnTwo] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
+  //   expect(marineTurnTwo.health).toEqual(1);
+  //   expect(zealotTurnTwo.health).toEqual(1);
+  //
+  //   const [marineTurnThree, zealotTurnThree] = Turn(marineTurnOne, zealotTurnOne, 'flatland');
+  //
+  //   expect(marineTurnThree.health).toEqual(0);
+  //   expect(zealotTurnThree.health).toEqual(0);
+  //   expect(marineTurnThree.canAttack).toEqual(true);
+  //   expect(zealotTurnThree.canAttack).toEqual(false);
+  // })
 })
