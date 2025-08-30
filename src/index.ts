@@ -72,6 +72,7 @@ export const TerrainModifier =
     return [heroTerrainModifier, enemyTerrainModifier]
 }
 
+// determines who can attack who, and makes them attack each other if possible
 export const Turn = (hero: Unit, enemy: Unit, [heroTerrain, enemyTerrain]: [number, number]) => {
   // if allowed, enemy and hero do damage to each other
   if (enemy.canAttack) {
