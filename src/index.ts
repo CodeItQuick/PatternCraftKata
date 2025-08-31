@@ -39,10 +39,16 @@ export const Battle =
       throw new Error('should never happen, the enemy is undefined');
     }
 
-    const [heroTerrainModifier, enemyTerrainModifier] = TerrainModifier([hero, enemy], terrainModifier);
+    let damageTaken = false;
+    const battleStartsSecondTurn = hero.attackType === 'melee' && enemy.attackType === 'melee';
+    if (battleStartsSecondTurn) {
+      [hero, enemy, damageTaken] = Turn(hero, enemy, terrainModifier) as [Unit, Unit, boolean];
+    }
+    do {
+      [hero, enemy, damageTaken] = Turn(hero, enemy, terrainModifier) as [Unit, Unit, boolean];
+    } while (damageTaken)
 
-    return [hero.takeDamage(enemy, enemyTerrainModifier),
-      enemy.takeDamage(hero, heroTerrainModifier)];
+    return [hero, enemy] as [Unit, Unit]
 }
 
 export const TerrainModifier =
@@ -73,14 +79,18 @@ export const TerrainModifier =
 }
 
 // determines who can attack who, and makes them attack each other if possible
-export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland') => {
+export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland'): [Unit, Unit, boolean] => {
   // if allowed, enemy and hero do damage to each other
   const [heroTerrain, enemyTerrain] = TerrainModifier([hero, enemy], terrain);
-  if (hero.canAttack) {
+  let damageTaken = false;
+  if (hero.canAttack && enemy.health > 0 && hero.health > 0) {
     enemy.takeTurnDamage(heroTerrain);
+    damageTaken = true;
   }
-  if (enemy.canAttack) {
+  if (enemy.canAttack && enemy.health > 0 && hero.health > 0 ||
+    enemy.canAttack && enemy.health === 0 && damageTaken && hero.health > 0 ) {
     hero.takeTurnDamage(enemyTerrain);
+    damageTaken = true;
   }
 
   if (terrain === 'wall') {
@@ -106,5 +116,5 @@ export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland') => {
       enemy.canAttack = false;
     }
   }
-  return [hero, enemy]
+  return [hero, enemy, damageTaken]
 }
