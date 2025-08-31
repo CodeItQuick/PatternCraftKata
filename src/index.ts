@@ -73,19 +73,31 @@ export const TerrainModifier =
 }
 
 // determines who can attack who, and makes them attack each other if possible
-export const Turn = (hero: Unit, enemy: Unit, [heroTerrain, enemyTerrain]: [number, number]) => {
+export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland') => {
   // if allowed, enemy and hero do damage to each other
-  if (enemy.canAttack) {
-    hero.takeTurnDamage(heroTerrain);
-  }
+  const [heroTerrain, enemyTerrain] = TerrainModifier([hero, enemy], terrain);
   if (hero.canAttack) {
-    enemy.takeTurnDamage(enemyTerrain);
+    enemy.takeTurnDamage(heroTerrain);
+  }
+  if (enemy.canAttack) {
+    hero.takeTurnDamage(enemyTerrain);
+  }
+
+  if (terrain === 'wall') {
+    if (hero.health > 0 &&
+      hero.attackType === 'melee') {
+      hero.canAttack = false;
+    }
+    if (enemy.health > 0 &&
+      enemy.attackType === 'melee') {
+      enemy.canAttack = false;
+    }
   }
   // if hero and enemy are alive, they can now attack each other
-  if (hero.health > 0 && enemy.health > 0) {
+  if (terrain !== 'wall' && hero.health > 0 && enemy.health > 0) {
     hero.canAttack = true;
-    enemy.canAttack = true
-  } else {
+    enemy.canAttack = true;
+  } else if (terrain !== 'wall') {
     // otherwise, one of them is dead and reset melee's attack modifier
     if (hero.attackType === 'melee') {
       hero.canAttack = false;
