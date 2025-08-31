@@ -56,6 +56,7 @@ export const Battle =
     return [hero, enemy] as [Unit, Unit]
 }
 
+// movement/space/grid?!?
 export const TerrainModifier =
   ([hero, enemy]: [Unit, Unit], modifier: string): [number, number] => {
     let heroTerrainModifier = 0;
