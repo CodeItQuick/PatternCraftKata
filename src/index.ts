@@ -39,14 +39,19 @@ export const Battle =
       throw new Error('should never happen, the enemy is undefined');
     }
 
-    let damageTaken = false;
     const battleStartsSecondTurn = hero.attackType === 'melee' && enemy.attackType === 'melee';
     if (battleStartsSecondTurn) {
-      [hero, enemy, damageTaken] = Turn(hero, enemy, terrainModifier) as [Unit, Unit, boolean];
+      [hero, enemy] = Turn(hero, enemy, terrainModifier) as [Unit, Unit];
     }
+    let attacking = false;
+    let validBattle = false;
     do {
-      [hero, enemy, damageTaken] = Turn(hero, enemy, terrainModifier) as [Unit, Unit, boolean];
-    } while (damageTaken)
+      let [{ canAttack: heroCanAttack, health: heroHealth }, { canAttack: enemyCanAttack, health: enemyHealth }] =
+        Turn(hero, enemy, terrainModifier) as [Unit, Unit];
+
+      attacking = heroCanAttack || enemyCanAttack;
+      validBattle = heroHealth > 0 && enemyHealth > 0;
+    } while (attacking && validBattle)
 
     return [hero, enemy] as [Unit, Unit]
 }
@@ -79,18 +84,14 @@ export const TerrainModifier =
 }
 
 // determines who can attack who, and makes them attack each other if possible
-export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland'): [Unit, Unit, boolean] => {
+export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland'): [Unit, Unit] => {
   // if allowed, enemy and hero do damage to each other
   const [heroTerrain, enemyTerrain] = TerrainModifier([hero, enemy], terrain);
-  let damageTaken = false;
-  if (hero.canAttack && enemy.health > 0 && hero.health > 0) {
+  if (hero.canAttack) {
     enemy.takeTurnDamage(heroTerrain);
-    damageTaken = true;
   }
-  if (enemy.canAttack && enemy.health > 0 && hero.health > 0 ||
-    enemy.canAttack && enemy.health === 0 && damageTaken && hero.health > 0 ) {
+  if (enemy.canAttack) {
     hero.takeTurnDamage(enemyTerrain);
-    damageTaken = true;
   }
 
   if (terrain === 'wall') {
@@ -116,5 +117,5 @@ export const Turn = (hero: Unit, enemy: Unit, terrain = 'flatland'): [Unit, Unit
       enemy.canAttack = false;
     }
   }
-  return [hero, enemy, damageTaken]
+  return [hero, enemy]
 }
